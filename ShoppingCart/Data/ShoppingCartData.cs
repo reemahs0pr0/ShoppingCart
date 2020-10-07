@@ -10,7 +10,7 @@ namespace ShoppingCart.Data
 {
     public class ShoppingCartData : Data
     {
-        public static List<Cart> GetCart(int userId)
+        public static List<Cart> GetCart(string userId)
         {
             //create list to store all records from Cart
             List<Cart> cart = new List<Cart>();
@@ -21,7 +21,7 @@ namespace ShoppingCart.Data
                 conn.Open();
                 string sql = @"SELECT p.ProductId, p.Image, p.Title, p.Description, p.Price, c.Quantity
                                 FROM Product p, CartCopy c WHERE p.ProductId = c.ProductId 
-                                 AND c.UserId = " + userId;
+                                 AND c.UserId = '" + userId + "'";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 SqlDataReader reader = cmd.ExecuteReader();
 
@@ -43,7 +43,7 @@ namespace ShoppingCart.Data
             //return list to controller
             return cart;
         }
-        public static void AddItem(int userId, int productId)
+        public static void AddItem(string userId, int productId)
         {
             //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -51,7 +51,7 @@ namespace ShoppingCart.Data
                 conn.Open();
                 //check if record exist
                 string check = @"SELECT COUNT(*) FROM CartCopy WHERE ProductId = " + productId + 
-                                    " AND UserId = " + userId;
+                                    " AND UserId = '" + userId + "'";
                 SqlCommand cmd1 = new SqlCommand(check, conn);
                 int checkRow = Convert.ToInt32(cmd1.ExecuteScalar());
 
@@ -70,13 +70,13 @@ namespace ShoppingCart.Data
                 {
                     //+1 quantity if item already exist in the cart for the user
                     string sql = @"UPDATE CartCopy SET Quantity = Quantity + 1 WHERE ProductId = " + 
-                                    productId + " AND UserId = " + userId;
+                                    productId + " AND UserId = '" + userId + "'";
                     SqlCommand cmd2 = new SqlCommand(sql, conn);
                     cmd2.ExecuteNonQuery();
                 }
             }
         }
-        public static void UpdateQuantity(int userId, int productId, int quantity)
+        public static void UpdateQuantity(string userId, int productId, int quantity)
         {
             //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -84,12 +84,13 @@ namespace ShoppingCart.Data
                 conn.Open();
                 //update quantity for the particular user and item
                 string sql = @"UPDATE CartCopy SET Quantity = " + quantity + 
-                                " WHERE ProductId = " + productId + " AND UserId = " + userId;
+                                " WHERE ProductId = " + productId + " AND UserId = '" + userId + 
+                                    "'";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.ExecuteNonQuery();
             }
         }
-        public static void RemoveItem(int userId, int productId)
+        public static void RemoveItem(string userId, int productId)
         {
             //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
@@ -97,7 +98,20 @@ namespace ShoppingCart.Data
                 conn.Open();
                 //delete record for the particular user and item
                 string sql = @"DELETE FROM CartCopy WHERE ProductId = " + productId +
-                                " AND UserID = " + userId;
+                                " AND UserID = '" + userId + "'";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                cmd.ExecuteNonQuery();
+            }
+        }
+        public static void UpdateId(string userId, string guid)
+        {
+            //connect to database
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                //update userId for record based on GUID used
+                string sql = @"UPDATE CartCopy SET UserId = '" + userId + "' WHERE UserId = '" +
+                                guid + "'";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.ExecuteNonQuery();
             }

@@ -45,3 +45,12 @@ C:\Users\shame\source\repos\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\Ra
 C:\Users\shame\source\repos\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\Razor\Views\Login\Index.cshtml.g.cs
 C:\Users\shame\source\repos\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\Razor\Views\Product\Index.cshtml.g.cs
 C:\Users\shame\source\repos\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\Razor\Views\Purchases\Index.cshtml.g.cs
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.csprojAssemblyReference.cache
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.AssemblyInfoInputs.cache
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.AssemblyInfo.cs
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.csproj.CoreCompileInputs.cache
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.RazorAssemblyInfo.cache
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.RazorAssemblyInfo.cs
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.dll
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.pdb
