@@ -1,0 +1,117 @@
+﻿@{
+    ViewData["Title"] = "View Cart";
+    string total = (string)ViewData["total"];
+    string sessionId = (string)ViewData["sessionId"];
+    List<Cart> cart = (List<Cart>)ViewData["cart"];
+    List<string> amt = new List<string>();
+    foreach (var item in cart)
+    {
+        amt.Add((item.Price * item.Quantity).ToString("#0.00"));
+    }
+}
+
+@section Scripts
+{
+    <script src="~/js/cart/displaycart.js"></script>
+}
+
+<style>
+    #empty {
+        text-align: center;
+        font-weight: bold;
+        font-size: 36px;
+    }
+
+    .total {
+        font-size: 20px;
+        position: fixed;
+        top: 75px;
+        right: 50px;
+    }
+
+    .product_container img {
+        width: 200px;
+        height: 200px;
+        border: solid 1px black;
+        display: block;
+        margin-left: 50px;
+        margin-right: 50px;
+        margin-top: 20px;
+    }
+
+    table {
+        margin: auto;
+    }
+
+    .remove_icon {
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        margin-left: 200px;
+    }
+
+    .product_container {
+        border: solid black 2px;
+        display: block;
+        margin: 20px 50px;
+    }
+
+    .quantity {
+        width: 40px;
+    }
+</style>
+
+<div id="header">
+    <span style="font-size:20px"><b>View Cart</b> </span><a href="/Product/Index"><u>Continue Shopping</u></a> |
+    @if (ViewData["sessionId"] != null)
+    {
+        <a href="/Purchases/Index" id="checkout"><u>Checkout</u></a>
+    }
+    else
+    {
+        <a href="/Login/Index" id="checkout"><u>Checkout</u></a>
+    }
+    <span class="total"><b>Total: $<span id="total_price">@total</span></b></span>
+</div>
+<div id="body">
+    @if (total == "0.00")
+    {
+        <span id="empty" style="display:block">
+            <br /><br /><br />
+            Your Cart Is Empty
+        </span>
+    }
+    else
+    {
+        <span id="empty" style="display:none">
+            <br /><br /><br />
+            Your Cart Is Empty
+        </span>
+        <table>
+            @for (int i = 0; i < cart.Count; i++)
+            {
+                <tr id=@cart[i].Id>
+                    <td>
+                        <div class="product_container text-center">
+                            @{
+                                string link = ViewData["images_prefix"] + cart[i].Image;
+                            }
+                            <img src="@link" />
+                            <b>@cart[i].Title</b>
+                            <br />
+                            @cart[i].Description
+                        </div>
+                    </td>
+                    <td align="left">
+                        Unit Price: $<span class="price">@cart[i].Price</span>
+                        <br /><br />
+                        Quantity: <input class="quantity" type="number" value=@cart[i].Quantity min="1" quantity_id=@cart[i].Id>
+                        <br /><br />
+                        Amount: $<span class="amount" amount_id=@cart[i].Id>@amt[i]</span>
+                    </td>
+                    <td><image src="/img/remove_icon.png" class="remove_icon" product_id=@cart[i].Id /></td>
+                </tr>
+            }
+        </table>
+    }
+</div>
