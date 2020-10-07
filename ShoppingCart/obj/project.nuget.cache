@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "L9pU/+v5F7r9lBpjxW+d00ujZlSoyCHTSZXZR8qQ81gMOddi53v+n4COY1b31BOfqKHoigU7C9wouLjxxWFH6g==",
+  "dgSpecHash": "JhnNIWN6YK0+trA5ttUHi7OlQ5PNvnXmIREJgT9qWrYCbUlhllCn5o9GmGI9+njJQ4nqgb2xgYMEdKPxIEJkjA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\shame\\source\\repos\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
+  "projectFilePath": "C:\\Users\\shame\\Documents\\GitHub\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\shame\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\shame\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",

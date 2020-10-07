@@ -459,11 +459,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\shame\\source\\repos\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
+      "projectUniqueName": "C:\\Users\\shame\\Documents\\GitHub\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
       "projectName": "ShoppingCart",
-      "projectPath": "C:\\Users\\shame\\source\\repos\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
+      "projectPath": "C:\\Users\\shame\\Documents\\GitHub\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
       "packagesPath": "C:\\Users\\shame\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\shame\\source\\repos\\ShoppingCart\\ShoppingCart\\obj\\",
+      "outputPath": "C:\\Users\\shame\\Documents\\GitHub\\ShoppingCart\\ShoppingCart\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\shame\\AppData\\Roaming\\NuGet\\NuGet.Config",
