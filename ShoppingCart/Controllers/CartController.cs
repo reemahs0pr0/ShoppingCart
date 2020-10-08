@@ -50,7 +50,8 @@ namespace ShoppingCart.Controllers
             ViewData["Is_Shopping"] = "menu_hilite";
 
             // inform HTML if user is guest
-            ViewData["guest"] = HttpContext.Session.GetInt32("guest");
+            ViewData["loggedin"] = Int32.TryParse(HttpContext.Session.GetString("userid"), 
+                out int userId);
 
             //html response
             return View();

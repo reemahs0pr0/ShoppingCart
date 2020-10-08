@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "View Cart";
     string total = (string)ViewData["total"];
-    int guest = (int)ViewData["guest"];
+    bool loggedIn = (bool)ViewData["loggedin"];
     List<Cart> cart = (List<Cart>)ViewData["cart"];
     List<string> amt = new List<string>();
     foreach (var item in cart)
@@ -63,7 +63,7 @@
 
 <div id="header">
     <span style="font-size:20px"><b>View Cart</b> </span><a href="/Product/Index"><u>Continue Shopping</u></a> |
-    @if (guest == 0)
+    @if (loggedIn)
     {
         <a href="/Purchases/Index" id="checkout"><u>Checkout</u></a>
     }
