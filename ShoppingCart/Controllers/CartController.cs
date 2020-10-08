@@ -13,6 +13,9 @@ namespace ShoppingCart.Controllers
     {
         public IActionResult Index()
         {
+            //assumed user has logged in
+            HttpContext.Session.SetString("userid", "1");
+
             //create cart list to store items details
             List<Cart> cart = new List<Cart>();
 
