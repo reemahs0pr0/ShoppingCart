@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ShoppingCart.Controllers
 {
-    public class PurchasesController : Controller
+    public class LogoutController : Controller
     {
-        public IActionResult DisplayPurchases()
+        public IActionResult Index()
         {
-            return View();
+            HttpContext.Session.Clear();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

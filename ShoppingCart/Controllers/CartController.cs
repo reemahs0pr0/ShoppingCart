@@ -11,27 +11,10 @@ namespace ShoppingCart.Controllers
 {
     public class CartController : Controller
     {
-        public IActionResult Index()
+        public IActionResult DisplayCart()
         {
-            //assumed user has logged in
-            HttpContext.Session.SetString("userid", "1");
-
-            //create cart list to store items details
-            List<Cart> cart = new List<Cart>();
-
-            //retrieve records from Cart from userId
-            if (HttpContext.Session.GetString("guid") == null)
-            {
-                cart = ShoppingCartData.GetCart(HttpContext.Session.GetString("userid"));
-            }
-            //replace GUID with real userID after logging in
-            else
-            {
-                ShoppingCartData.UpdateId(HttpContext.Session.GetString("userid"), 
-                    HttpContext.Session.GetString("guid"));
-                cart = ShoppingCartData.GetCart(HttpContext.Session.GetString("userid"));
-            }
-
+            List<Cart> cart = cart = CartData.GetCart(HttpContext.Session.GetString("userid"));
+            
             //create variable to store total price
             double total = 0;
 
@@ -56,7 +39,6 @@ namespace ShoppingCart.Controllers
             ViewData["loggedin"] = Int32.TryParse(HttpContext.Session.GetString("userid"), 
                 out int userId);
 
-            //html response
             return View();
         }
 
@@ -68,15 +50,13 @@ namespace ShoppingCart.Controllers
             if (HttpContext.Session.GetString("userid") == null)
             {
                 HttpContext.Session.SetString("userid", Guid.NewGuid().ToString());
-                //extra key-value to confirm if guest
-                HttpContext.Session.SetInt32("guest", 1);
             }
 
             //store identifier as Add object and convert to integer
             int productId = Convert.ToInt32(add.Id);
 
             //send identifier to database to update quantity record
-            ShoppingCartData.AddItem(HttpContext.Session.GetString("userid"), productId);
+            CartData.AddItem(HttpContext.Session.GetString("userid"), productId);
 
             return Json(new
             {
@@ -93,7 +73,7 @@ namespace ShoppingCart.Controllers
             int quantity = Convert.ToInt32(update.Quantity);
 
             //send identifier to database to update quantity record
-            ShoppingCartData.UpdateQuantity(HttpContext.Session.GetString("userid"), productId, 
+            CartData.UpdateQuantity(HttpContext.Session.GetString("userid"), productId, 
                 quantity);
 
             return Json(new
@@ -110,7 +90,7 @@ namespace ShoppingCart.Controllers
             int productId = Convert.ToInt32(remove.Id);
 
             //send identifier to database to remove record
-            ShoppingCartData.RemoveItem(HttpContext.Session.GetString("userid"), productId);
+            CartData.RemoveItem(HttpContext.Session.GetString("userid"), productId);
 
             return Json(new
             {

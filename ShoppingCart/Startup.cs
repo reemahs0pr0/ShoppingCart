@@ -49,7 +49,7 @@ namespace ShoppingCart
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Cart}/{action=Index}/{id?}");
+                    pattern: "{controller=Product}/{action=DisplayProduct}/{id?}");
             });
         }
     }
