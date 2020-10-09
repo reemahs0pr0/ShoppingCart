@@ -46,6 +46,7 @@ namespace ShoppingCart.Controllers
                 return RedirectToAction("DisplayProduct", "Product");
             }
         }
+
         //redirect from guest checkout
         public IActionResult Index2()
         {
