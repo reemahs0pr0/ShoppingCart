@@ -34,5 +34,29 @@ namespace ShoppingCart.Controllers
             }
             return purchases;
         }
+        public IActionResult DisplayNewPurchases()
+        {
+            List<Cart> cart = CartData.GetCart(HttpContext.Session.GetString("userid"));
+            PurchasesData.AddOrder(HttpContext.Session.GetString("userid"));
+            PurchasesData.AddOrderDetails(HttpContext.Session.GetString("userid"));
+
+            foreach (Cart item in cart)
+            {
+                for (int i = 0; i < item.Quantity; i++)
+                {
+                    ActivationCode code = new ActivationCode
+                    {
+                        Code = Guid.NewGuid().ToString(),
+                        ProductId = item.Id
+                    };
+                    PurchasesData.AddActivationCode(code, HttpContext.Session.GetString("userid"));
+                }
+            }
+            CartData.DeleteCart(HttpContext.Session.GetString("userid"));
+
+            List<Purchases> purchases = FinalList(); // data of past purchases will be added into a list here
+            ViewData["purchases"] = purchases;
+            return View("DisplayPurchases");
+        }
     }
 }

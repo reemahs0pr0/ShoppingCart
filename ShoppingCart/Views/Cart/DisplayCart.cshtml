@@ -34,8 +34,8 @@
         height: 200px;
         border: solid 1px black;
         display: block;
-        margin-left: 50px;
-        margin-right: 50px;
+        margin-left: auto;
+        margin-right: auto;
         margin-top: 20px;
     }
 
@@ -53,11 +53,23 @@
     .product_container {
         border: solid black 2px;
         display: block;
-        margin: 20px 50px;
+        margin: auto;
+        width: 300px;
+        padding: 10px;
     }
 
     .quantity {
         width: 40px;
+    }
+
+    td {
+        padding: 5px;
+    }
+
+    .details {
+        display: block;
+        margin-left: 30px;
+        padding: 10px;
     }
 </style>
 
@@ -68,7 +80,7 @@
     <a href="/Product/DisplayProduct"><u>Continue Shopping</u></a> |
     @if (loggedIn)
     {
-        <a href="/Purchases/DisplayPurchases" id="checkout"><u>Checkout</u></a>
+        <a href="/Purchases/DisplayNewPurchases" id="checkout"><u>Checkout</u></a>
     }
     else
     {
@@ -90,6 +102,7 @@
             <br /><br /><br />
             Your Cart Is Empty
         </span>
+        <br />
         <table>
             @for (int i = 0; i < cart.Count; i++)
             {
@@ -99,18 +112,20 @@
                             @{
                                 string link = ViewData["images_prefix"] + cart[i].Image;
                             }
-                            <img src="@link" />
+                            <img src="@link"/>
                             <b>@cart[i].Title</b>
                             <br />
                             @cart[i].Description
                         </div>
                     </td>
-                    <td align="left">
-                        Unit Price: $<span class="price">@cart[i].Price</span>
-                        <br /><br />
-                        Quantity: <input class="quantity" type="number" value=@cart[i].Quantity min="1" quantity_id=@cart[i].Id>
-                        <br /><br />
-                        Amount: $<span class="amount" amount_id=@cart[i].Id>@amt[i]</span>
+                    <td>
+                        <div class="details">
+                            Unit Price: $<span class="price">@cart[i].Price</span>
+                            <br /><br />
+                            Quantity: <input class="quantity" type="number" value=@cart[i].Quantity min="1" quantity_id=@cart[i].Id>
+                            <br /><br />
+                            Amount: $<span class="amount" amount_id=@cart[i].Id>@amt[i]</span>
+                        </div>
                     </td>
                     <td><image src="/img/remove_icon.png" class="remove_icon" product_id=@cart[i].Id /></td>
                 </tr>

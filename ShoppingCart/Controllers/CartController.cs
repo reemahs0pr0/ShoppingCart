@@ -13,7 +13,7 @@ namespace ShoppingCart.Controllers
     {
         public IActionResult DisplayCart()
         {
-            List<Cart> cart = cart = CartData.GetCart(HttpContext.Session.GetString("userid"));
+            List<Cart> cart = CartData.GetCart(HttpContext.Session.GetString("userid"));
             
             //create variable to store total price
             double total = 0;

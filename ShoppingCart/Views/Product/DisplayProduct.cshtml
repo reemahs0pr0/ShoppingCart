@@ -89,6 +89,10 @@
         #search {
             display: inline-block
         }
+
+        td {
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -96,9 +100,9 @@
         <h1>Software Gallery</h1>
     </header>
     <div id="subheader">
-        @if (ViewData["username"] != null)
+        @if (ViewData["name"] != null)
         {
-            @:Hello, <b>@ViewData["username"]</b>
+            @:Hello, <b>@ViewData["name"]</b>
             <a href="/Purchases/DisplayPurchases" id="checkout"><u>My Purchases</u></a> @:| <a href="/Logout/Index"><u>Logout</u></a>
         }
         else
@@ -146,6 +150,7 @@
                                 </div>
                                 <br />
                                 <div>
+                                    <p style="text-align:justify"><b>@productslist[i + j].Title</b></p>
                                     <p style="text-align:justify">@productslist[i + j].Description</p>
                                     <p style="text-align:justify"><em>S$@productslist[i + j].Price</em></p>
                                 </div>
@@ -183,6 +188,7 @@
                                     </div>
                                     <br />
                                     <div>
+                                        <p style="text-align:justify"><b>@productslist[i + j].Title</b></p>
                                         <p style="text-align:justify">@foundproductslist[i + j].Description</p>
                                         <p style="text-align:justify"><em>S$@foundproductslist[i + j].Price</em></p>
                                     </div>

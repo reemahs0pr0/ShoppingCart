@@ -10,7 +10,7 @@ namespace ShoppingCart.Models
         public int OrderId { set; get; }
         public int ProductId { set; get; }
         public int Quantity { set; get; }
-        public DateTime PurchaseDate { set; get; }
+        public string PurchaseDate { set; get; }
         public string Image { set; get; }
         public string Title { set; get; }
         public string Description { set; get; }

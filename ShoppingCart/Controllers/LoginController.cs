@@ -19,7 +19,7 @@ namespace ShoppingCart.Controllers
         public IActionResult Index(ShoppingCart.Models.User userModel)
         {
             string userId;
-            userId = UserData.FindUser(userModel);
+            userId = UserData.FindUserId(userModel);
 
             if (userId == null)
             {
@@ -34,14 +34,14 @@ namespace ShoppingCart.Controllers
                 HttpContext.Session.SetString("userid", userId);
                 CartData.DeleteCart(userId);
                 CartData.UpdateId(HttpContext.Session.GetString("userid"), HttpContext.Session.GetString("sessionid"));
-                HttpContext.Session.SetString("username", userModel.Username);
+                HttpContext.Session.SetString("name", UserData.FindName(HttpContext.Session.GetString("userid")));
 
                 return RedirectToAction("DisplayProduct", "Product");
             }
             else
             {
                 HttpContext.Session.SetString("userid", userId);
-                HttpContext.Session.SetString("username", userModel.Username);
+                HttpContext.Session.SetString("name", UserData.FindName(HttpContext.Session.GetString("userid")));
 
                 return RedirectToAction("DisplayProduct", "Product");
             }
@@ -56,7 +56,7 @@ namespace ShoppingCart.Controllers
         public IActionResult Index2(ShoppingCart.Models.User userModel)
         {
             string userId;
-            userId = UserData.FindUser(userModel);
+            userId = UserData.FindUserId(userModel);
 
             if (userId == null)
             {
@@ -69,7 +69,7 @@ namespace ShoppingCart.Controllers
                 HttpContext.Session.SetString("userid", userId);
                 CartData.DeleteCart(userId);
                 CartData.UpdateId(HttpContext.Session.GetString("userid"), HttpContext.Session.GetString("sessionid"));
-                HttpContext.Session.SetString("username", userModel.Username);
+                HttpContext.Session.SetString("name", UserData.FindName(HttpContext.Session.GetString("userid")));
 
                 return RedirectToAction("DisplayCart", "Cart");
             }

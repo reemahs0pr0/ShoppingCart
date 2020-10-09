@@ -13,7 +13,9 @@ namespace ShoppingCart.Data
         {
             List<ActivationCode> codes = new List<ActivationCode>();
 
-            string sql = @"select * from ActivationCode Where UserId = " + userId;
+            string sql = @"SELECT ActivationCode, o.OrderId, ProductId 
+                            FROM ActivationCode ac, [Order] o 
+                              WHERE ac.OrderId = o.OrderId AND UserId = " + userId;
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -35,15 +37,16 @@ namespace ShoppingCart.Data
         }
         public static List<Purchases> GetPurchases(string userId) // create a list of purchases
         {
-            string sql = @"select OD.OrderId, OD.ProductId, Quantity, OD.UserId, PurchaseDate, [Image], Title, [Description], Link 
+            string sql = @"SELECT o.OrderId, od.ProductId, Quantity, o.UserId, PurchaseDate, [Image], Title, [Description]
                             FROM
                             (
-                             (Select OD.OrderId, OD.ProductId, OD.Quantity, OD.UserId from OrderDetails OD) OD
-                             full outer join
-                             (select PurchaseDate, O.orderId from [Order] O) O on OD.OrderId = O.OrderId 
-                             full outer join
-                             (select [image], title, [description], Link, P.ProductId From Product P) P on  OD.ProductId = P.ProductId
-                            ) where OD.UserId = " + userId;
+	                            (SELECT OrderId, ProductId, Quantity FROM [Order Details]) od
+	                            FULL OUTER JOIN
+	                            (SELECT PurchaseDate, OrderId, UserId FROM [Order]) o ON od.OrderId = o.OrderId 
+	                            FULL OUTER JOIN
+	                            (SELECT [Image], Title, [Description], ProductId FROM Product) p ON  od.ProductId = p.ProductId
+                            ) 
+                            WHERE o.UserId = " + userId + " ORDER BY o.OrderId DESC";
 
 
             List<Purchases> purchases = new List<Purchases>();
@@ -60,7 +63,7 @@ namespace ShoppingCart.Data
                         OrderId = (int)reader["OrderId"],
                         ProductId = (int)reader["ProductId"],
                         Quantity = (int)reader["Quantity"],
-                        PurchaseDate = (DateTime)reader["PurchaseDate"],
+                        PurchaseDate = (string)reader["PurchaseDate"],
                         Image = (string)reader["Image"],
                         Title = (string)reader["Title"],
                         Description = (string)reader["Description"],
@@ -69,8 +72,65 @@ namespace ShoppingCart.Data
                 }
                 conn.Close();
             }
-
             return purchases;
+        }
+        public static void AddOrder(string userId)
+        {
+            //connect to database
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                //create new record for user for the new item
+                string sql = @"INSERT INTO [Order] (UserId, PurchaseDate) 
+                                VALUES (@UserId, @PurchaseDate)";
+                SqlCommand cmd2 = new SqlCommand(sql, conn);
+                cmd2.Parameters.AddWithValue("@UserId", userId);
+                cmd2.Parameters.AddWithValue("@PurchaseDate", DateTime.Now.ToString("dd-MM-yyyy"));
+                cmd2.ExecuteNonQuery();
+            }
+        }
+        public static void AddOrderDetails(string userId)
+        {
+            //connect to database
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                //obtain orderId from Order table
+                string sql = @"SELECT TOP 1 OrderId from [Order] where userId = " + userId + 
+                                " ORDER BY OrderId DESC";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                int orderId = (int)cmd.ExecuteScalar();
+
+                //copy records from Cart into Order Details
+                string sql2 = @"INSERT INTO [Order Details] (OrderId, ProductId, Quantity)
+                                 SELECT " + orderId + ", c.ProductId, c.Quantity " +
+                                 "FROM [Order] o, Cart c WHERE c.UserId = o.UserId " +
+                                  "AND OrderId = " + orderId;
+                SqlCommand cmd2 = new SqlCommand(sql2, conn);
+                cmd2.ExecuteNonQuery();
+            }
+        }
+        public static void AddActivationCode(ActivationCode code, string userId)
+        {
+            //connect to database
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                //obtain orderId from Order table
+                string sql = @"SELECT TOP 1 OrderId from [Order] where userId = " + userId +
+                                " ORDER BY OrderId DESC";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                int orderId = (int)cmd.ExecuteScalar();
+
+                //copy records from Cart into Order Details
+                string sql2 = @"INSERT INTO ActivationCode (ActivationCode, OrderId,  ProductId)
+                                 VALUES (@ActivationCode, @OrderId, @ProductId)";
+                SqlCommand cmd2 = new SqlCommand(sql2, conn);
+                cmd2.Parameters.AddWithValue("@ActivationCode", code.Code);
+                cmd2.Parameters.AddWithValue("@OrderId", orderId);
+                cmd2.Parameters.AddWithValue("@ProductId", code.ProductId);
+                cmd2.ExecuteNonQuery();
+            }
         }
     }
 }

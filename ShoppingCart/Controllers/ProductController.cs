@@ -24,7 +24,7 @@ namespace ShoppingCart.Controllers
             ViewBag.a = 1; //indicator to display all products
 
             //pass username, if any, to HTML
-            ViewData["username"] = HttpContext.Session.GetString("username");
+            ViewData["name"] = HttpContext.Session.GetString("name");
 
             // to highlight "Shopping" as the selected menu-item
             ViewData["Is_Shopping"] = "menu_hilite";
@@ -39,7 +39,7 @@ namespace ShoppingCart.Controllers
             if (searchedproductlists.Count == 0)
             {
                 //pass username, if any, to HTML
-                ViewData["username"] = HttpContext.Session.GetString("username");
+                ViewData["name"] = HttpContext.Session.GetString("name");
 
                 //send data to View
                 ViewData["search"] = search;
@@ -47,8 +47,8 @@ namespace ShoppingCart.Controllers
             }
             else
             {
-                //pass username, if any, to HTML
-                ViewData["username"] = HttpContext.Session.GetString("username");
+                //pass name, if any, to HTML
+                ViewData["name"] = HttpContext.Session.GetString("name");
 
                 //send data to View
                 ViewData["search"] = search;
