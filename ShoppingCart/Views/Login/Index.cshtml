@@ -4,6 +4,11 @@
 
 @model ShoppingCart.Models.User
 
+@section Scripts
+{
+    <script src="~/js/login/index.js"></script>
+}
+
 <!DOCTYPE html>
 
 <html>
@@ -21,32 +26,37 @@
 </head>
 <body>
     <div id="login-div">
-        @using (Html.BeginForm("Authenticate", "Login", FormMethod.Post))
+        @using (Html.BeginForm("Index", "Login", FormMethod.Post, new { id = "form" } ))
         {
-            <table>
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.Username)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => model.Username)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Html.LabelFor(model => model.Password)
-                    </td>
-                    <td>
-                        @Html.EditorFor(model => model.Password)
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td align="right">
-                        <input type="submit" name="name" value="login" />
-                    </td>
-                </tr>
-            </table>
+        <table>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Username)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Username, new { id = "username" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.Password)
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Password, new { id = "password", type = "password" })
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td align="right">
+                    <input type="submit" name="name" value="login" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center" style="font-weight:bold;color:red">
+                    @ViewData["errmsg"]
+                </td>
+            </tr>
+        </table>
         }
 
     </div>

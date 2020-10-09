@@ -16,26 +16,20 @@ namespace ShoppingCart.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Authenticate(ShoppingCart.Models.User userModel)
+        public IActionResult Index(ShoppingCart.Models.User userModel)
         {
             string userId;
-
-            if (userModel.Username == null || userModel.Password == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            else
-            {
-                userId = UserData.FindUser(userModel);
-            }
+            userId = UserData.FindUser(userModel);
 
             if (userId == null)
             {
-                //return RedirectToAction("productpage", "Login");
-                return RedirectToAction("Index", "Login");
+                //cannot find user
+                ViewData["errmsg"] = "User not found or incorrect password";
+                return View();
             }
             else if (HttpContext.Session.GetString("userid") != null)
             {
+                //if user has added to cart before logging in
                 HttpContext.Session.SetString("sessionid", HttpContext.Session.GetString("userid"));
                 HttpContext.Session.SetString("userid", userId);
                 CartData.DeleteCart(userId);
@@ -49,32 +43,24 @@ namespace ShoppingCart.Controllers
                 HttpContext.Session.SetString("userid", userId);
                 HttpContext.Session.SetString("username", userModel.Username);
 
-                //  return RedirectToAction("Index", "Login");
                 return RedirectToAction("DisplayProduct", "Product");
             }
         }
+        //redirect from guest checkout
         public IActionResult Index2()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult Authenticate2(ShoppingCart.Models.User userModel)
+        public IActionResult Index2(ShoppingCart.Models.User userModel)
         {
             string userId;
-
-            if (userModel.Username == null || userModel.Password == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            else
-            {
-                userId = UserData.FindUser(userModel);
-            }
+            userId = UserData.FindUser(userModel);
 
             if (userId == null)
             {
-                //return RedirectToAction("productpage", "Login");
-                return RedirectToAction("Index", "Login");
+                ViewData["errmsg"] = "User not found or incorrect password";
+                return View();
             }
             else
             {

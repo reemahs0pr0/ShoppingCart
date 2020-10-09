@@ -109,6 +109,7 @@ namespace ShoppingCart.Data
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
+                //check if user has items in cart from previous visit
                 string check = @"SELECT COUNT(*) FROM Cart WHERE UserId = '" + userId + "'";
                 SqlCommand cmd1 = new SqlCommand(check, conn);
                 int checkRow = Convert.ToInt32(cmd1.ExecuteScalar());
@@ -119,6 +120,7 @@ namespace ShoppingCart.Data
                 }
                 else
                 {
+                    //if there are, sum the quantity for cart icon display
                     string sql = @"SELECT SUM(Quantity) FROM Cart WHERE UserId = '" + userId + "'";
                     SqlCommand cmd = new SqlCommand(sql, conn);
                     int checkQuantity = Convert.ToInt32(cmd.ExecuteScalar());
@@ -144,7 +146,7 @@ namespace ShoppingCart.Data
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                //update userId for record based on GUID used
+                //update userId for record based on GUID used as guest
                 string sql = @"UPDATE Cart SET UserId = '" + userId + "' WHERE UserId = '" +
                                 guid + "'";
                 SqlCommand cmd = new SqlCommand(sql, conn);

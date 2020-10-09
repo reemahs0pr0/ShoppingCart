@@ -14,6 +14,7 @@ namespace ShoppingCart.Data
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
+                //check if there is such user
                 string sql = @"select count(*) from [User] where UserName ='" + userModel.Username
                     + "'AND Password ='" + userModel.Password + "'";
                 SqlCommand cmd = new SqlCommand(sql, conn);
@@ -26,6 +27,7 @@ namespace ShoppingCart.Data
                 }
                 else
                 {
+                    //if found user, return its userId
                     string sql2 = @"select UserID from [User] where UserName ='" + userModel.Username
                     + "'AND Password ='" + userModel.Password + "'";
                     SqlCommand cmd2 = new SqlCommand(sql2, conn);
