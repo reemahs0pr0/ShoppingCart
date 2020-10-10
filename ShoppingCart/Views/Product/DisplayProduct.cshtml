@@ -92,6 +92,7 @@
 
         td {
             padding: 10px;
+            width: 33.33%;
         }
     </style>
 </head>
@@ -181,14 +182,14 @@
                                         <img style="align-content:center" src=@url width="150" height="150" />
                                         <br /><br />
                                         <div style="align-content:center">
-                                            <button class="button3 add-to-cart" id="@productslist[i + j].Id">
+                                            <button class="button3 add-to-cart" id="@foundproductslist[i + j].Id">
                                                 Add to Cart
                                             </button>
                                         </div>
                                     </div>
                                     <br />
                                     <div>
-                                        <p style="text-align:justify"><b>@productslist[i + j].Title</b></p>
+                                        <p style="text-align:justify"><b>@foundproductslist[i + j].Title</b></p>
                                         <p style="text-align:justify">@foundproductslist[i + j].Description</p>
                                         <p style="text-align:justify"><em>S$@foundproductslist[i + j].Price</em></p>
                                     </div>

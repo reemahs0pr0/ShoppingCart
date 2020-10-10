@@ -13,6 +13,7 @@ namespace ShoppingCart.Controllers
     {
         public IActionResult DisplayCart()
         {
+            //store in-cart items for the user in a list
             List<Cart> cart = CartData.GetCart(HttpContext.Session.GetString("userid"));
             
             //create variable to store total price
@@ -24,11 +25,13 @@ namespace ShoppingCart.Controllers
                 total += item.Price * item.Quantity;
             }
 
-            //send data to View
+            //to display 'total' in html
             if (total == 0)
                 ViewData["total"] = "0.00";
             else
                 ViewData["total"] = total.ToString("#0.00");
+
+            //send other data to View
             ViewData["cart"] = cart;
             ViewData["images_prefix"] = "/img/";
 
@@ -42,7 +45,6 @@ namespace ShoppingCart.Controllers
             return View();
         }
 
-        //action method to receive AJAX call
         [HttpPost]
         public IActionResult AddItem([FromBody] Add add)
         {
@@ -64,7 +66,6 @@ namespace ShoppingCart.Controllers
             });
         }
 
-        //action method to receive AJAX call
         [HttpPost]
         public IActionResult UpdateQuantity([FromBody] Update update)
         {
@@ -82,7 +83,6 @@ namespace ShoppingCart.Controllers
             });
         }
 
-        //action method to receive AJAX call
         [HttpPost]
         public IActionResult RemoveItem([FromBody] Remove remove)
         {

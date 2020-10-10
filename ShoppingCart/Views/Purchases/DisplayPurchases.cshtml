@@ -4,6 +4,12 @@
 }
 
 <style>
+    #empty {
+        text-align: center;
+        font-weight: bold;
+        font-size: 36px;
+    }
+
     .dl-button {
         background-color: #4CAF50;
         border: none;
@@ -79,42 +85,56 @@
     </header>
     <a href="/Product/DisplayProduct"><u>Home</u></a> | <a href="/Logout/Index"><u>Logout</u></a>
 </div>
-<table class="purchases-table">
-    @{
-        foreach (Purchases purchase in purchases) @* code for generating table *@
-        {
-            <tr>
-                <td width="50%"><h2><b>@purchase.Title</b></h2>
-                <br />
-                <img src="/img/@purchase.Image" class="image"/>
-                <br />
-                <p>@purchase.Description</p></td>
-                <td>
-                    <table class="in-table">
-                        <tr><td>Date Purchased:</td><td>@purchase.PurchaseDate</td></tr>
-                        <tr><td>Quantity:</td><td>@purchase.Quantity</td></tr>
-                        <tr>
-                            <td>Activation Code:</td>
-                            @if (purchase.Quantity == 1)@*Code that will either generate a single line or drop down depending on quantity*@
-                            {
-                                <td>@purchase.ActivationCode[0]</td>
-                            }
-                            else
-                            {
-                                <td>
-                                    <select name="code">
-                                        @foreach (string code in purchase.ActivationCode)@* Loop that generates the options in the drop down box *@
-                                        {
-                                            <option value="@code">@code</option>
-                                        }
-                                    </select>
-                                </td>
-                            }
-                        </tr>
-                    </table>
-                    <button onclick=" window.open('https://www.iss.nus.edu.sg/graduate-programmes/programme/detail/graduate-diploma-in-systems-analysis', '_target');" type="button" class="dl-button">Download</button>
-                </td>
-            </tr>
-        }
+<div id="body">
+    @if (purchases.Count() == 0)
+    {
+        <span id="empty" style="display:block">
+            <br /><br /><br />
+            You Have No Purchases
+        </span>
     }
-</table>
+    else
+    {
+        <table class="purchases-table">
+            @{
+                foreach (Purchases purchase in purchases) @* code for generating table *@
+                {
+                    <tr>
+                        <td width="50%">
+                            <h2><b>@purchase.Title</b></h2>
+                            <br />
+                            <img src="/img/@purchase.Image" class="image" />
+                            <br />
+                            <p>@purchase.Description</p>
+                        </td>
+                        <td>
+                            <table class="in-table">
+                                <tr><td>Date Purchased:</td><td>@purchase.PurchaseDate</td></tr>
+                                <tr><td>Quantity:</td><td>@purchase.Quantity</td></tr>
+                                <tr>
+                                    <td>Activation Code:</td>
+                                    @if (purchase.Quantity == 1)@*Code that will either generate a single line or drop down depending on quantity*@
+                                    {
+                                        <td>@purchase.ActivationCode[0]</td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <select name="code">
+                                                @foreach (string code in purchase.ActivationCode)@* Loop that generates the options in the drop down box *@
+                                                {
+                                                    <option value="@code">@code</option>
+                                                }
+                                            </select>
+                                        </td>
+                                    }
+                                </tr>
+                            </table>
+                            <button onclick=" window.open('https://www.iss.nus.edu.sg/graduate-programmes/programme/detail/graduate-diploma-in-systems-analysis', '_target');" type="button" class="dl-button">Download</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    }
+</div>

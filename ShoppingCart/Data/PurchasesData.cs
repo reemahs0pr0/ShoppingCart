@@ -9,8 +9,9 @@ namespace ShoppingCart.Data
 {
     public class PurchasesData : Data
     {
-        public static List<ActivationCode> GetActivationCodes(string userId) // creates a list of activation codes based on requested userId
+        public static List<ActivationCode> GetActivationCodes(string userId)
         {
+            //creates a list to store activation codes based on requested userId
             List<ActivationCode> codes = new List<ActivationCode>();
 
             string sql = @"SELECT ActivationCode, o.OrderId, ProductId 
@@ -35,8 +36,12 @@ namespace ShoppingCart.Data
             }
             return codes;
         }
-        public static List<Purchases> GetPurchases(string userId) // create a list of purchases
+
+        public static List<Purchases> GetPurchases(string userId) 
         {
+            // create a list of purchases
+            List<Purchases> purchases = new List<Purchases>();
+
             string sql = @"SELECT o.OrderId, od.ProductId, Quantity, o.UserId, PurchaseDate, [Image], Title, [Description]
                             FROM
                             (
@@ -47,9 +52,6 @@ namespace ShoppingCart.Data
 	                            (SELECT [Image], Title, [Description], ProductId FROM Product) p ON  od.ProductId = p.ProductId
                             ) 
                             WHERE o.UserId = " + userId + " ORDER BY o.OrderId DESC";
-
-
-            List<Purchases> purchases = new List<Purchases>();
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -74,13 +76,13 @@ namespace ShoppingCart.Data
             }
             return purchases;
         }
+
         public static void AddOrder(string userId)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                //create new record for user for the new item
+                //create new record for user for the new order
                 string sql = @"INSERT INTO [Order] (UserId, PurchaseDate) 
                                 VALUES (@UserId, @PurchaseDate)";
                 SqlCommand cmd2 = new SqlCommand(sql, conn);
@@ -91,7 +93,6 @@ namespace ShoppingCart.Data
         }
         public static void AddOrderDetails(string userId)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -112,7 +113,6 @@ namespace ShoppingCart.Data
         }
         public static void AddActivationCode(ActivationCode code, string userId)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -122,7 +122,7 @@ namespace ShoppingCart.Data
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 int orderId = (int)cmd.ExecuteScalar();
 
-                //copy records from Cart into Order Details
+                //insert created activation codes of every item into record 
                 string sql2 = @"INSERT INTO ActivationCode (ActivationCode, OrderId,  ProductId)
                                  VALUES (@ActivationCode, @OrderId, @ProductId)";
                 SqlCommand cmd2 = new SqlCommand(sql2, conn);

@@ -15,7 +15,6 @@ namespace ShoppingCart.Data
             //create list to store all records from Cart
             List<Cart> cart = new List<Cart>();
 
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -27,7 +26,6 @@ namespace ShoppingCart.Data
 
                 while (reader.Read())
                 {
-                    //store each record as Cart object
                     Cart item = new Cart()
                     {
                         Id = (int)reader["ProductId"],
@@ -40,12 +38,10 @@ namespace ShoppingCart.Data
                     cart.Add(item);
                 }
             }
-            //return list to controller
             return cart;
         }
         public static void AddItem(string userId, int productId)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -78,7 +74,6 @@ namespace ShoppingCart.Data
         }
         public static void UpdateQuantity(string userId, int productId, int quantity)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -92,7 +87,6 @@ namespace ShoppingCart.Data
         }
         public static void RemoveItem(string userId, int productId)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -105,7 +99,6 @@ namespace ShoppingCart.Data
         }
         public static int CheckLastInCart(string userId)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -130,7 +123,6 @@ namespace ShoppingCart.Data
         }
         public static void DeleteCart(string userId)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -142,11 +134,10 @@ namespace ShoppingCart.Data
         }
         public static void UpdateId(string userId, string guid)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                //update userId for record based on GUID used as guest
+                //switch user id from GUID to real user id
                 string sql = @"UPDATE Cart SET UserId = '" + userId + "' WHERE UserId = '" +
                                 guid + "'";
                 SqlCommand cmd = new SqlCommand(sql, conn);

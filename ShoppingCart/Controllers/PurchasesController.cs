@@ -11,17 +11,26 @@ namespace ShoppingCart.Controllers
 {
     public class PurchasesController : Controller
     {
+        //when user click 'My Purchases'
         public IActionResult DisplayPurchases()
         {
-            List<Purchases> purchases = FinalList(); // data of past purchases will be added into a list here
+            // data of past purchases will be added into a list here
+            List<Purchases> purchases = FinalList();
             ViewData["purchases"] = purchases;
+
+            // to highlight "Shopping" as the selected menu-item
+            ViewData["Is_Shopping"] = "menu_hilite";
+
             return View();
         }
-        public List<Purchases> FinalList() // Combines the purchases and activation list
+        public List<Purchases> FinalList()
         {
+            //get list of all purchases and activation codes from db
             List<Purchases> purchases = PurchasesData.GetPurchases(HttpContext.Session.GetString("userid"));
             List<ActivationCode> codes = PurchasesData.GetActivationCodes(HttpContext.Session.GetString("userid"));
 
+
+            // combines the purchases and activation list
             foreach (Purchases purchase in purchases)
             {
                 foreach (ActivationCode code in codes)
@@ -34,12 +43,18 @@ namespace ShoppingCart.Controllers
             }
             return purchases;
         }
+
+        //when user has logged in and click 'checkout'
         public IActionResult DisplayNewPurchases()
         {
+            //get records from cart
             List<Cart> cart = CartData.GetCart(HttpContext.Session.GetString("userid"));
+
+            //add order and ordetails records based on cart
             PurchasesData.AddOrder(HttpContext.Session.GetString("userid"));
             PurchasesData.AddOrderDetails(HttpContext.Session.GetString("userid"));
 
+            //create activation code for every purchased item and store in db
             foreach (Cart item in cart)
             {
                 for (int i = 0; i < item.Quantity; i++)
@@ -52,11 +67,11 @@ namespace ShoppingCart.Controllers
                     PurchasesData.AddActivationCode(code, HttpContext.Session.GetString("userid"));
                 }
             }
+
+            //erase all records from cart
             CartData.DeleteCart(HttpContext.Session.GetString("userid"));
 
-            List<Purchases> purchases = FinalList(); // data of past purchases will be added into a list here
-            ViewData["purchases"] = purchases;
-            return View("DisplayPurchases");
+            return RedirectToAction("DisplayPurchases");
         }
     }
 }

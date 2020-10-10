@@ -10,7 +10,6 @@ namespace ShoppingCart.Data
     {
         public static string FindUserId(ShoppingCart.Models.User userModel)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -39,17 +38,15 @@ namespace ShoppingCart.Data
         }
         public static string FindName(string userId)
         {
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                //extract name from database
+                //extract name from database based on user id
                 string sql2 = @"select Name from [User] where Userid = '" + userId + "'";
                 SqlCommand cmd2 = new SqlCommand(sql2, conn);
                 string name = Convert.ToString(cmd2.ExecuteScalar());
 
                 return name;
-
             }
         }
     }

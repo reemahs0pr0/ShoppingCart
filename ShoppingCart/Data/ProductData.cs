@@ -11,10 +11,9 @@ namespace ShoppingCart.Data
     {
         public static List<Product> GetAllProducts()
         {
-            //create list to store all records from Cart
+            //create list to store all records from Product
             List<Product> productslist = new List<Product>();
 
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -24,7 +23,6 @@ namespace ShoppingCart.Data
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    //store each record as Product object
                     Product product = new Product()
                     {
                         Id = (int)reader["ProductId"],
@@ -36,15 +34,14 @@ namespace ShoppingCart.Data
                     productslist.Add(product);
                 }
             }
-            //return list to controller
             return productslist;
         }
+
         public static List<Product> GetProductSearch(string search)
         {
-            //create list to store all records from Cart
+            //create list to store all records from Product based on search results
             List<Product> productslist = new List<Product>();
 
-            //connect to database
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
