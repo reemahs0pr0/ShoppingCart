@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace ShoppingCart.Models
         public string Image { set; get; }
         public string Title { set; get; }
         public string Description { set; get; }
+        public string Link { set; get; }
         public List<string> ActivationCode { set; get; }
 
         public Purchases()

@@ -42,14 +42,14 @@ namespace ShoppingCart.Data
             // create a list of purchases
             List<Purchases> purchases = new List<Purchases>();
 
-            string sql = @"SELECT o.OrderId, od.ProductId, Quantity, o.UserId, PurchaseDate, [Image], Title, [Description]
+            string sql = @"SELECT o.OrderId, od.ProductId, Quantity, o.UserId, PurchaseDate, [Image], Title, [Description], Link
                             FROM
                             (
 	                            (SELECT OrderId, ProductId, Quantity FROM [Order Details]) od
 	                            FULL OUTER JOIN
 	                            (SELECT PurchaseDate, OrderId, UserId FROM [Order]) o ON od.OrderId = o.OrderId 
 	                            FULL OUTER JOIN
-	                            (SELECT [Image], Title, [Description], ProductId FROM Product) p ON  od.ProductId = p.ProductId
+	                            (SELECT [Image], Title, [Description], ProductId, Link FROM Product) p ON  od.ProductId = p.ProductId
                             ) 
                             WHERE o.UserId = " + userId + " ORDER BY o.OrderId DESC";
 
@@ -69,6 +69,7 @@ namespace ShoppingCart.Data
                         Image = (string)reader["Image"],
                         Title = (string)reader["Title"],
                         Description = (string)reader["Description"],
+                        Link = (string)reader["Link"],
                     };
                     purchases.Add(purchase);
                 }
