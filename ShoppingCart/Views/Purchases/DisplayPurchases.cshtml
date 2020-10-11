@@ -130,7 +130,37 @@
                                     }
                                 </tr>
                             </table>
-                            <button onclick=" window.open('https://www.iss.nus.edu.sg/graduate-programmes/programme/detail/graduate-diploma-in-systems-analysis', '_target');" type="button" class="dl-button">Download</button>
+                            @{
+                                switch (purchase.Title) @*switch download link for each product*@ @*will have to use for loop if there are a lot more products*@
+                                {
+                                    case "Avast Antivirus":
+                                        <button onclick=" window.open('https://www.avast.com/en-eu/index#pc', '_target');" type="button" class="dl-button">Download</button>
+                                        break;
+
+                                    case "BitDefender Antivirus":
+                                        <button onclick=" window.open('https://www.bitdefender.com/solutions/free.html', '_target');" type="button" class="dl-button">Download</button>
+                                        break;
+
+                                    case "McAfee Antivirus":
+                                        <button onclick=" window.open('https://www.mcafee.com/en-us/for-home.html', '_target');" type="button" class="dl-button">Download</button>
+                                        break;
+
+                                    case "Norton Antivirus":
+                                        <button onclick=" window.open('https://sg.norton.com/products/norton-360?inid=nortoncom_nav_norton-360_homepage:home', '_target');" type="button" class="dl-button">Download</button>
+                                        break;
+
+                                    case "PCProtect Antivirus":
+                                        <button onclick=" window.open('https://www.pcprotect.com/software', '_target');" type="button" class="dl-button">Download</button>
+                                        break;
+
+                                    case "TotalAV Antivirus":
+                                        <button onclick=" window.open('https://www.totalav.com/en/free-antivirus', '_target');" type="button" class="dl-button">Download</button>
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+                            }
                         </td>
                     </tr>
                 }
