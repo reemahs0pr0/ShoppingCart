@@ -12,7 +12,7 @@ namespace ShoppingCart.Controllers
         {
             HttpContext.Session.Clear();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("DisplayProduct", "Product");
         }
     }
 }

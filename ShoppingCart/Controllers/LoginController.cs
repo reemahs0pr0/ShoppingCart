@@ -44,10 +44,10 @@ namespace ShoppingCart.Controllers
 
                 //overwrite existing cart with new cart 
                 CartData.DeleteCart(userId);
-                CartData.UpdateId(HttpContext.Session.GetString("userid"), HttpContext.Session.GetString("sessionid"));
+                CartData.UpdateId(userId, HttpContext.Session.GetString("sessionid"));
 
                 //set 'name' key with name of user
-                HttpContext.Session.SetString("name", UserData.FindName(HttpContext.Session.GetString("userid")));
+                HttpContext.Session.SetString("name", UserData.FindName(userId));
 
                 return RedirectToAction("DisplayProduct", "Product");
             }
@@ -57,7 +57,7 @@ namespace ShoppingCart.Controllers
 
                 //set session with user id and name
                 HttpContext.Session.SetString("userid", userId);
-                HttpContext.Session.SetString("name", UserData.FindName(HttpContext.Session.GetString("userid")));
+                HttpContext.Session.SetString("name", UserData.FindName(userId));
 
                 return RedirectToAction("DisplayProduct", "Product");
             }
@@ -83,11 +83,18 @@ namespace ShoppingCart.Controllers
             }
             else
             {
+                //store GUID as session id
                 HttpContext.Session.SetString("sessionid", HttpContext.Session.GetString("userid"));
+
+                //replace user id with real user id from db
                 HttpContext.Session.SetString("userid", userId);
+
+                //overwrite existing cart with new cart
                 CartData.DeleteCart(userId);
-                CartData.UpdateId(HttpContext.Session.GetString("userid"), HttpContext.Session.GetString("sessionid"));
-                HttpContext.Session.SetString("name", UserData.FindName(HttpContext.Session.GetString("userid")));
+                CartData.UpdateId(userId, HttpContext.Session.GetString("sessionid"));
+
+                //set 'name' key with name of user
+                HttpContext.Session.SetString("name", UserData.FindName(userId));
 
                 return RedirectToAction("DisplayCart", "Cart");
             }
