@@ -98,8 +98,7 @@ namespace ShoppingCart.Data
             {
                 conn.Open();
                 //obtain orderId from Order table
-                string sql = @"SELECT TOP 1 OrderId from [Order] where userId = " + userId + 
-                                " ORDER BY OrderId DESC";
+                string sql = @"SELECT MAX(OrderId) FROM [Order] where userId = " + userId;
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 int orderId = (int)cmd.ExecuteScalar();
 
@@ -118,8 +117,7 @@ namespace ShoppingCart.Data
             {
                 conn.Open();
                 //obtain orderId from Order table
-                string sql = @"SELECT TOP 1 OrderId from [Order] where userId = " + userId +
-                                " ORDER BY OrderId DESC";
+                string sql = @"SELECT MAX(OrderId) FROM [Order] where userId = " + userId;
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 int orderId = (int)cmd.ExecuteScalar();
 
