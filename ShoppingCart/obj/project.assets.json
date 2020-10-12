@@ -454,19 +454,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\shame\\.nuget\\packages\\": {}
+    "C:\\Users\\limkh\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\shame\\Documents\\GitHub\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
+      "projectUniqueName": "C:\\Users\\limkh\\Documents\\GitHub\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
       "projectName": "ShoppingCart",
-      "projectPath": "C:\\Users\\shame\\Documents\\GitHub\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
-      "packagesPath": "C:\\Users\\shame\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\shame\\Documents\\GitHub\\ShoppingCart\\ShoppingCart\\obj\\",
+      "projectPath": "C:\\Users\\limkh\\Documents\\GitHub\\ShoppingCart\\ShoppingCart\\ShoppingCart.csproj",
+      "packagesPath": "C:\\Users\\limkh\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\limkh\\Documents\\GitHub\\ShoppingCart\\ShoppingCart\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\shame\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\limkh\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

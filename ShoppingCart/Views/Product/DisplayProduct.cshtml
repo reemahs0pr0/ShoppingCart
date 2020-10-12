@@ -6,11 +6,15 @@
     Product bestseller = (Product)ViewData["bestsellingproduct"];
     Product secondbestseller = (Product)ViewData["secondbestproduct"];
     Product thirdbestseller = (Product)ViewData["thirdbestproduct"];
+    bool loggedIn = (bool)ViewData["loggedin"];
+    List<Product> wishlist = (List<Product>)ViewData["wishlist"];
+
 }
 
 @section Scripts
 {
     <script src="~/js/product/displayproduct.js"></script>
+    <script src="~/js/wish/wish.js"></script>
 }
 
 <head>
@@ -75,15 +79,15 @@
             right: 50px;
         }
 
-        .buttonforcart:hover {
-            background-color: #57509f
-        }
+            .buttonforcart:hover {
+                background-color: #57509f
+            }
 
-        .buttonforcart:active {
-            background-color: #57509f;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
+            .buttonforcart:active {
+                background-color: #57509f;
+                box-shadow: 0 5px #666;
+                transform: translateY(4px);
+            }
 
         table {
             margin: auto;
@@ -98,17 +102,36 @@
             padding: 10px;
             width: 33.33%;
         }
+
+        .wish_icon {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
     </style>
+    
+
 </head>
 <body>
+    
     <header>
         <h1>Software Gallery</h1>
     </header>
     <div id="subheader">
+        @if (loggedIn == true)@*check if logged in*@
+        {
+
+            <div hidden id="logState" state="yes"></div>
+        }
+        else
+        {
+            <div hidden id="logState" state="no"></div>
+        }
+
         @if (ViewData["name"] != null)
         {
             @:Hello, <b>@ViewData["name"]</b>
-            <a href="/Purchases/DisplayPurchases" id="checkout"><u>My Purchases</u></a> @:| <a href="/Logout/Index" id="logout"><u>Logout</u></a>
+            <a href="/Purchases/DisplayPurchases" id="checkout"><u>My Purchases</u> | </a><a href="/Wish/Index"><u>My Wishlist</u></a> @:| <a href="/Logout/Index" id="logout"><u>Logout</u></a>
         }
         else
         {
@@ -117,7 +140,7 @@
     </div>
     <div id="body">
         <form action="/Cart/DisplayCart">
-            <input type="submit" value="Cart: @count" class="buttonforcart" id="clickme"/>
+            <input type="submit" value="Cart: @count" class="buttonforcart" id="clickme" />
         </form>
         <br />
         <div id="search">
@@ -147,11 +170,29 @@
                                 <div>
                                     <img style="align-content:center" src=@url width="150" height="150" />
                                     <br /><br />
-                                    <div style="align-content:center">
-                                        <button class="button3 add-to-cart" id="@productslist[i + j].Id">
-                                            Add to Cart
-                                        </button>
-                                    </div>
+                                          <div style="align-content:center">
+                                              <button class="button3 add-to-cart" id="@productslist[i + j].Id">
+                                                  Add to Cart
+                                              </button>
+                                              @{string idWish = "wish" + productslist[i + j].Id;}  @*create wish ID*@
+                                              @if (loggedIn == true) // generates wish icon according to loggedin status
+                                              {
+                                                  if (wishlist[i + j].Wish == false)
+                                                  {
+                                                      <img src="~/img/hearts black.png" class="wish_icon" id="@idWish" />
+                                                  }
+                                                  else
+                                                  {
+                                                      <img src="~/img/hearts color.png" class="wish_icon" id="@idWish" />
+                                                  }
+                                              }
+                                              else
+                                              {
+                                                  <img src="~/img/hearts black.png" class="wish_icon" id="@idWish" />
+                                              }
+
+
+                                          </div>
                                     <div style="align-content:center">
                                         @if (productslist[i + j].Id == bestseller.Id)
                                         {
@@ -203,11 +244,27 @@
                                     <div>
                                         <img style="align-content:center" src=@url width="150" height="150" />
                                         <br /><br />
-                                        <div style="align-content:center">
-                                            <button class="button3 add-to-cart" id="@foundproductslist[i + j].Id">
-                                                Add to Cart
-                                            </button>
-                                        </div>
+                                              <div style="align-content:center">
+                                                  <button class="button3 add-to-cart" id="@foundproductslist[i + j].Id">
+                                                      Add to Cart
+                                                  </button>
+                                                  @{string idWish = "wish" + foundproductslist[i + j].Id;}  @*create wish ID*@
+                                                  @if (loggedIn == true) // generates wish icon according to loggedin status
+                                                  {
+                                                      if (wishlist[i + j].Wish == false)
+                                                      {
+                                                          <img src="~/img/hearts black.png" class="wish_icon" id="@idWish" />
+                                                      }
+                                                      else
+                                                      {
+                                                          <img src="~/img/hearts color.png" class="wish_icon" id="@idWish" />
+                                                      }
+                                                  }
+                                                  else
+                                                  {
+                                                      <img src="~/img/hearts black.png" class="wish_icon" id="@idWish" />
+                                                  }
+                                              </div>
                                         <div style="align-content:center">
                                             @if (foundproductslist[i + j].Id == bestseller.Id)
                                             {

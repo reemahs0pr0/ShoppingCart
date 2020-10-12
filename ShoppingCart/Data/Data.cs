@@ -7,6 +7,6 @@ namespace ShoppingCart.Data
 {
     public class Data
     {
-        protected static readonly string connectionString = "Server=LAPTOP-N40F22HO;Database=ShoppingCart;Integrated Security=true";
+        protected static readonly string connectionString = "Server=DESKTOP-589MI59;Database=ShoppingCart;Integrated Security=true";
     }
 }
