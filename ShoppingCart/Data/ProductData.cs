@@ -65,24 +65,24 @@ namespace ShoppingCart.Data
             }
             return productslist;
         }
-        public static List<Product> GetTopSellingProduct()
+        public static List<Purchases> GetTopSellingProduct()
         {
-            List<Product> topsellingproductlist = new List<Product>();
+            List<Purchases> topsellingproductlist = new List<Purchases>();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                string sql = @"SELECT ProductId
-                               FROM [Order Details]
+                string sql = @"SELECT ProductId, SUM(Quantity) AS TotalQty
+                               FROM [Order Details] 
                                 GROUP BY ProductId
-                                 ORDER BY sum(Quantity) DESC";
+                                 ORDER BY SUM(Quantity) DESC";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
-                    Product product = new Product()
+                    Purchases product = new Purchases()
                     {
-                        Id = (int)reader["ProductId"]
-
+                        ProductId = (int)reader["ProductId"],
+                        Quantity = (int)reader["TotalQty"]
                     };
                     topsellingproductlist.Add(product);
                 }

@@ -3,9 +3,8 @@
     List<Product> productslist = (List<Product>)ViewData["productlists"];
     List<Product> foundproductslist = (List<Product>)ViewData["foundproducts"];
     int count = (int)ViewData["count"];
-    Product bestseller = (Product)ViewData["bestsellingproduct"];
-    Product secondbestseller = (Product)ViewData["secondbestproduct"];
-    Product thirdbestseller = (Product)ViewData["thirdbestproduct"];
+    List<Purchases> topsellingproduct = (List<Purchases>)ViewData["topsellingproduct"];
+    List<int> topthreeqty = (List<int>)ViewData["topthreeqty"];
 }
 
 @section Scripts
@@ -16,27 +15,12 @@
 <head>
     <title>cart</title>
     <style>
-        .button {
-            background-color: #4CAF50; /* Green */
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
-
         .button2 {
             background-color: white;
-            border: none;
+            border: solid 1px black;
             color: black;
             text-align: center;
             text-decoration: none;
-            display: inline-block;
-            font-size: 12px;
-            padding: 3px;
             cursor: pointer;
         }
 
@@ -87,7 +71,7 @@
 
         table {
             margin: auto;
-            width: 100%;
+            width: 99%;
         }
 
         #search {
@@ -96,7 +80,11 @@
 
         td {
             padding: 10px;
-            width: 33.33%;
+            width: 33%;
+        }
+
+        #searchid {
+            width: 250px;
         }
     </style>
 </head>
@@ -125,12 +113,11 @@
                 <input id="searchid" type="search" class="search-field" placeholder="Looking for?" name="search" value="@ViewData["search"]" />
                 <button id="searchitem" type="submit" class="button2">
                     <span>Search</span>
-                    <img src="/img/mglass.png" />
+                    <img src="/img/mglass.png"/>
                 </button>
             </form>
         </div>
     </div>
-    <br />
     <br />
     @{
         if (ViewBag.a == 1)
@@ -153,21 +140,21 @@
                                         </button>
                                     </div>
                                     <div style="align-content:center">
-                                        @if (productslist[i + j].Id == bestseller.Id)
+                                        @for (int k = 0; k < topsellingproduct.Count; k++)
                                         {
-                                            <span style="color:darkred"><b>BEST SELLING!</b></span>
-                                        }
-                                        else if ((productslist[i + j].Id) == secondbestseller.Id)
-                                        {
-                                            <span style="color:orangered"><b>2nd BEST SELLING!</b></span>
-                                        }
-                                        else if ((productslist[i + j].Id) == thirdbestseller.Id)
-                                        {
-                                            <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span>
-                                        }
-                                        else
-                                        {
-                                            <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>
+                                            if (topsellingproduct[k].ProductId == productslist[i + j].Id)
+                                            {
+                                                if (topsellingproduct[k].Quantity == topthreeqty[0])
+                                                {<span style="color:darkred"><b>BEST SELLING!</b></span> }
+
+                                                else if (topsellingproduct[k].Quantity == topthreeqty[1])
+                                                { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
+
+                                                else if (topsellingproduct[k].Quantity == topthreeqty[2])
+                                                { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
+                                                else
+                                                { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span> }
+                                            }
                                         }
                                     </div>
                                 </div>
@@ -209,21 +196,21 @@
                                             </button>
                                         </div>
                                         <div style="align-content:center">
-                                            @if (foundproductslist[i + j].Id == bestseller.Id)
+                                            @for (int k = 0; k < topsellingproduct.Count; k++)
                                             {
-                                                <span style="color:darkred"><b>BEST SELLING!</b></span>
-                                            }
-                                            else if ((foundproductslist[i + j].Id) == secondbestseller.Id)
-                                            {
-                                                <span style="color:orangered"><b>2nd BEST SELLING!</b></span>
-                                            }
-                                            else if ((foundproductslist[i + j].Id) == thirdbestseller.Id)
-                                            {
-                                                <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span>
-                                            }
-                                            else
-                                            {
-                                                <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>
+                                                if (topsellingproduct[k].ProductId == foundproductslist[i + j].Id)
+                                                {
+                                                    if (topsellingproduct[k].Quantity == topthreeqty[0])
+                                                    {<span style="color:darkred"><b>BEST SELLING!</b></span> }
+
+                                                    else if (topsellingproduct[k].Quantity == topthreeqty[1])
+                                                    { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
+
+                                                    else if (topsellingproduct[k].Quantity == topthreeqty[2])
+                                                    { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
+                                                    else
+                                                    { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span> }
+                                                }
                                             }
                                         </div>
                                     </div>

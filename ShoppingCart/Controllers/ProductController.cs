@@ -17,17 +17,14 @@ namespace ShoppingCart.Controllers
             List<Product> productlists = ProductData.GetAllProducts();
 
             //to get top selling based on past purchases and code implementation
-            List<Product> topsellingproduct = ProductData.GetTopSellingProduct();
+            List<Purchases> topsellingproduct = ProductData.GetTopSellingProduct();
 
-            //first 3 elements are top 3 items purchased
-            Product bestsellingproduct = topsellingproduct[0];
-            Product secondbestproduct = topsellingproduct[1];
-            Product thirdbestproduct = topsellingproduct[2];
+            ViewData["topsellingproduct"] = topsellingproduct;
 
-            //send top selling products to View
-            ViewData["bestsellingproduct"] = bestsellingproduct;
-            ViewData["secondbestproduct"] = secondbestproduct;
-            ViewData["thirdbestproduct"] = thirdbestproduct;
+            //to get list of top 3 unique quantity values
+            List<int> topthreeqty = thirdLargest(topsellingproduct);
+
+            ViewData["topthreeqty"] = topthreeqty;
 
             //check if there is any pre-existing item in cart
             int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
@@ -55,17 +52,14 @@ namespace ShoppingCart.Controllers
             if (searchedproductlists.Count == 0)
             {
                 //to get top selling based on past purchases and code implementation
-                List<Product> topsellingproduct = ProductData.GetTopSellingProduct();
+                List<Purchases> topsellingproduct = ProductData.GetTopSellingProduct();
 
-                //first 3 elements are top 3 items purchased
-                Product bestsellingproduct = topsellingproduct[0];
-                Product secondbestproduct = topsellingproduct[1];
-                Product thirdbestproduct = topsellingproduct[2];
+                ViewData["topsellingproduct"] = topsellingproduct;
 
-                //send top selling products to View
-                ViewData["bestsellingproduct"] = bestsellingproduct;
-                ViewData["secondbestproduct"] = secondbestproduct;
-                ViewData["thirdbestproduct"] = thirdbestproduct;
+                //to get list of top 3 unique quantity values
+                List<int> topthreeqty = thirdLargest(topsellingproduct);
+
+                ViewData["topthreeqty"] = topthreeqty;
 
                 //check if there is any pre-existing item in cart
                 int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
@@ -84,17 +78,14 @@ namespace ShoppingCart.Controllers
             else
             {
                 //to get top selling based on past purchases and code implementation
-                List<Product> topsellingproduct = ProductData.GetTopSellingProduct();
+                List<Purchases> topsellingproduct = ProductData.GetTopSellingProduct();
 
-                //first 3 elements are top 3 items purchased
-                Product bestsellingproduct = topsellingproduct[0];
-                Product secondbestproduct = topsellingproduct[1];
-                Product thirdbestproduct = topsellingproduct[2];
+                ViewData["topsellingproduct"] = topsellingproduct;
 
-                //send top selling products to View
-                ViewData["bestsellingproduct"] = bestsellingproduct;
-                ViewData["secondbestproduct"] = secondbestproduct;
-                ViewData["thirdbestproduct"] = thirdbestproduct;
+                //to get list of top 3 unique quantity values
+                List<int> topthreeqty = thirdLargest(topsellingproduct);
+
+                ViewData["topthreeqty"] = topthreeqty;
 
                 //check if there is any pre-existing item in cart
                 int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
@@ -112,6 +103,43 @@ namespace ShoppingCart.Controllers
                 ViewData["Is_Shopping"] = "menu_hilite";
             }
             return View("DisplayProduct");
+        }
+        static List<int> thirdLargest(List<Purchases> topsellingproduct)
+        {
+            List<int> topthreehighestqty = new List<int>();
+
+            //find first largest quantity value 
+            int first = topsellingproduct[0].Quantity;
+
+            for (int i = 1; i < topsellingproduct.Count; i++)
+            {
+                if (topsellingproduct[i].Quantity > first)
+                    first = topsellingproduct[i].Quantity;
+            }
+
+            topthreehighestqty.Add(first);
+
+            //find second largest quantity value 
+            int second = 0;
+
+            for (int i = 0; i < topsellingproduct.Count; i++)
+                if (topsellingproduct[i].Quantity > second && topsellingproduct[i].Quantity < first)
+                    second = topsellingproduct[i].Quantity;
+
+            topthreehighestqty.Add(second);
+
+            //find third largest quantity value 
+            int third = 0;
+
+            for (int i = 0; i < topsellingproduct.Count; i++)
+            {
+                if (topsellingproduct[i].Quantity > third && topsellingproduct[i].Quantity < second)
+                    third = topsellingproduct[i].Quantity;
+            }
+
+            topthreehighestqty.Add(third);
+
+            return topthreehighestqty;
         }
     }
 }
