@@ -12,5 +12,10 @@ namespace ShoppingCart.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
+        public bool Wish { get; set; }
+        public Product()
+        {
+            Wish = false;
+        }
     }
 }
