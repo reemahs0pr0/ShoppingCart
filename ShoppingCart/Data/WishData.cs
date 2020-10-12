@@ -11,7 +11,7 @@ namespace ShoppingCart.Data
 {
     public class WishData : Data
     {
-        public static List<Product> GetWishList(List<Product> productList, int userId)
+        public static List<Product> GetWishList(List<Product> productList, int userId) //generates a product list with proper Wish boolean
         {
             List<Product> prodWishList = productList;
             
@@ -34,11 +34,11 @@ namespace ShoppingCart.Data
             }
             foreach (Product product in prodWishList)
             {
-                foreach (Wish wish in wishList)
+                foreach (Wish wish in wishList) //creating boolean for Wish parameter in the Product
                 {
                     if(product.Id == wish.ProductId)
                     {
-                        product.Wish = true;
+                        product.Wish = true; //if product is in wishlist, will be true
                     }
                 }
             }
@@ -46,7 +46,7 @@ namespace ShoppingCart.Data
             
         }
         
-        public static void AddItem(string userId, int productId)
+        public static void AddItem(string userId, int productId) // Adds item to wishlist
         {
            using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -60,7 +60,7 @@ namespace ShoppingCart.Data
                 cmd2.ExecuteNonQuery();
             }
         }
-        public static void RemoveItem(string userId, int productId)
+        public static void RemoveItem(string userId, int productId) // removes item from wishlist
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {

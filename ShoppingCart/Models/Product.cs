@@ -9,7 +9,7 @@ namespace ShoppingCart.Models
     {
         public Product()
         {
-            Wish = false;
+            Wish = false; // default setting is product is not on wishlist
         }
         public int Id { get; set; }
         public string Image { get; set; }
