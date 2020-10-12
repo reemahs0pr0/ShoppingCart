@@ -65,5 +65,29 @@ namespace ShoppingCart.Data
             }
             return productslist;
         }
+        public static List<Product> GetTopSellingProduct()
+        {
+            List<Product> topsellingproductlist = new List<Product>();
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string sql = @"SELECT ProductId
+                               FROM [Order Details]
+                                GROUP BY ProductId
+                                 ORDER BY sum(Quantity) DESC";
+                SqlCommand cmd = new SqlCommand(sql, conn);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Product product = new Product()
+                    {
+                        Id = (int)reader["ProductId"]
+
+                    };
+                    topsellingproductlist.Add(product);
+                }
+            }
+            return topsellingproductlist;
+        }
     }
 }

@@ -3,6 +3,9 @@
     List<Product> productslist = (List<Product>)ViewData["productlists"];
     List<Product> foundproductslist = (List<Product>)ViewData["foundproducts"];
     int count = (int)ViewData["count"];
+    Product bestseller = (Product)ViewData["bestsellingproduct"];
+    Product secondbestseller = (Product)ViewData["secondbestproduct"];
+    Product thirdbestseller = (Product)ViewData["thirdbestproduct"];
 }
 
 @section Scripts
@@ -149,6 +152,24 @@
                                             Add to Cart
                                         </button>
                                     </div>
+                                    <div style="align-content:center">
+                                        @if (productslist[i + j].Id == bestseller.Id)
+                                        {
+                                            <span style="color:darkred"><b>BEST SELLING!</b></span>
+                                        }
+                                        else if ((productslist[i + j].Id) == secondbestseller.Id)
+                                        {
+                                            <span style="color:orangered"><b>2nd BEST SELLING!</b></span>
+                                        }
+                                        else if ((productslist[i + j].Id) == thirdbestseller.Id)
+                                        {
+                                            <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span>
+                                        }
+                                        else
+                                        {
+                                            <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>
+                                        }
+                                    </div>
                                 </div>
                                 <br />
                                 <div>
@@ -186,6 +207,24 @@
                                             <button class="button3 add-to-cart" id="@foundproductslist[i + j].Id">
                                                 Add to Cart
                                             </button>
+                                        </div>
+                                        <div style="align-content:center">
+                                            @if (foundproductslist[i + j].Id == bestseller.Id)
+                                            {
+                                                <span style="color:darkred"><b>BEST SELLING!</b></span>
+                                            }
+                                            else if ((foundproductslist[i + j].Id) == secondbestseller.Id)
+                                            {
+                                                <span style="color:orangered"><b>2nd BEST SELLING!</b></span>
+                                            }
+                                            else if ((foundproductslist[i + j].Id) == thirdbestseller.Id)
+                                            {
+                                                <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span>
+                                            }
+                                            else
+                                            {
+                                                <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>
+                                            }
                                         </div>
                                     </div>
                                     <br />

@@ -16,6 +16,19 @@ namespace ShoppingCart.Controllers
             //create product list to store items details
             List<Product> productlists = ProductData.GetAllProducts();
 
+            //to get top selling based on past purchases and code implementation
+            List<Product> topsellingproduct = ProductData.GetTopSellingProduct();
+
+            //first 3 elements are top 3 items purchased
+            Product bestsellingproduct = topsellingproduct[0];
+            Product secondbestproduct = topsellingproduct[1];
+            Product thirdbestproduct = topsellingproduct[2];
+
+            //send top selling products to View
+            ViewData["bestsellingproduct"] = bestsellingproduct;
+            ViewData["secondbestproduct"] = secondbestproduct;
+            ViewData["thirdbestproduct"] = thirdbestproduct;
+
             //check if there is any pre-existing item in cart
             int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
@@ -41,6 +54,19 @@ namespace ShoppingCart.Controllers
 
             if (searchedproductlists.Count == 0)
             {
+                //to get top selling based on past purchases and code implementation
+                List<Product> topsellingproduct = ProductData.GetTopSellingProduct();
+
+                //first 3 elements are top 3 items purchased
+                Product bestsellingproduct = topsellingproduct[0];
+                Product secondbestproduct = topsellingproduct[1];
+                Product thirdbestproduct = topsellingproduct[2];
+
+                //send top selling products to View
+                ViewData["bestsellingproduct"] = bestsellingproduct;
+                ViewData["secondbestproduct"] = secondbestproduct;
+                ViewData["thirdbestproduct"] = thirdbestproduct;
+
                 //check if there is any pre-existing item in cart
                 int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
@@ -57,6 +83,19 @@ namespace ShoppingCart.Controllers
             }
             else
             {
+                //to get top selling based on past purchases and code implementation
+                List<Product> topsellingproduct = ProductData.GetTopSellingProduct();
+
+                //first 3 elements are top 3 items purchased
+                Product bestsellingproduct = topsellingproduct[0];
+                Product secondbestproduct = topsellingproduct[1];
+                Product thirdbestproduct = topsellingproduct[2];
+
+                //send top selling products to View
+                ViewData["bestsellingproduct"] = bestsellingproduct;
+                ViewData["secondbestproduct"] = secondbestproduct;
+                ViewData["thirdbestproduct"] = thirdbestproduct;
+
                 //check if there is any pre-existing item in cart
                 int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
