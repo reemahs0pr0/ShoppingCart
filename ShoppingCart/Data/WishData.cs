@@ -9,38 +9,31 @@ namespace ShoppingCart.Data
 {
     public class WishData : Data
     {
-        public static List<Product> GetWishList(List<Product> productList, string userId)
+        public static List<Wish> GetWishList(string userId)
         {
-            List<Product> prodWishList = productList;
-
             List<Wish> wishList = new List<Wish>();
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                string sql = @"SELECT ProductId FROM WishList Where userId = '" + userId + "'";
+                string sql = @"SELECT p.ProductId, p.Image, p.Title, p.Description
+                                FROM Product p, Wishlist w WHERE p.ProductId = w.ProductId 
+                                 AND w.UserId = '" + userId + "'";
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 SqlDataReader reader = cmd.ExecuteReader();
                 while (reader.Read())
                 {
                     Wish wish = new Wish()
                     {
-                        ProductId = (int)reader["ProductId"]
+                        Id = (int)reader["ProductId"],
+                        Image = (string)reader["Image"],
+                        Title = (string)reader["Title"],
+                        Description = (string)reader["Description"],
                     };
                     wishList.Add(wish);
                 }
-            }
-            foreach (Product product in prodWishList)
-            {
-                foreach (Wish wish in wishList)
-                {
-                    if (product.Id == wish.ProductId)
-                    {
-                        product.Wish = true;
-                    }
-                }
-            }
-            return prodWishList;
+            }            
+            return wishList;
         }
 
         public static void AddItem(string userId, int productId)

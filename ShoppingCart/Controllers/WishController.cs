@@ -13,12 +13,14 @@ namespace ShoppingCart.Controllers
     {
         public IActionResult DisplayWish()
         {
-            //create product list to store items details
-            List<Product> productlists = ProductData.GetAllProducts();
-
             //get WishList if logged in
-            List<Product> wishlist = WishData.GetWishList(productlists, HttpContext.Session.GetString("userid"));
+            List<Wish> wishlist = WishData.GetWishList(HttpContext.Session.GetString("userid"));
 
+            //check if there is any pre-existing item in cart
+            int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
+
+            //send data to View
+            ViewData["count"] = count;
             ViewData["wishlist"] = wishlist;
             ViewData["images_prefix"] = "/img/";
 

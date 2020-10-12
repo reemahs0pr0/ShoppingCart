@@ -18,18 +18,24 @@ namespace ShoppingCart.Controllers
 
             //to get top selling based on past purchases and code implementation
             List<Purchases> topsellingproduct = ProductData.GetTopSellingProduct();
-
             ViewData["topsellingproduct"] = topsellingproduct;
 
             //to get list of top 3 unique quantity values
             List<int> topthreeqty = thirdLargest(topsellingproduct);
-
             ViewData["topthreeqty"] = topthreeqty;
 
             //check if there is any pre-existing item in cart
             int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
+            //get WishList if logged in
+            List<Wish> wishlist = new List<Wish>();
+            if (HttpContext.Session.GetString("name") != null)
+            {
+                wishlist = WishData.GetWishList(HttpContext.Session.GetString("userid"));
+            }
+
             //send data to View
+            ViewData["wishlist"] = wishlist;
             ViewData["count"] = count;
             ViewData["productlists"] = productlists;
             ViewBag.a = 1; //indicator to display all products
@@ -51,16 +57,6 @@ namespace ShoppingCart.Controllers
 
             if (searchedproductlists.Count == 0)
             {
-                //to get top selling based on past purchases and code implementation
-                List<Purchases> topsellingproduct = ProductData.GetTopSellingProduct();
-
-                ViewData["topsellingproduct"] = topsellingproduct;
-
-                //to get list of top 3 unique quantity values
-                List<int> topthreeqty = thirdLargest(topsellingproduct);
-
-                ViewData["topthreeqty"] = topthreeqty;
-
                 //check if there is any pre-existing item in cart
                 int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
@@ -90,7 +86,15 @@ namespace ShoppingCart.Controllers
                 //check if there is any pre-existing item in cart
                 int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
+                //get WishList if logged in
+                List<Wish> wishlist = new List<Wish>();
+                if (HttpContext.Session.GetString("name") != null)
+                {
+                    wishlist = WishData.GetWishList(HttpContext.Session.GetString("userid"));
+                }
+
                 //send data to View
+                ViewData["wishlist"] = wishlist;
                 ViewData["count"] = count;
                 ViewData["search"] = search;
                 ViewData["foundproducts"] = searchedproductlists;
@@ -104,6 +108,7 @@ namespace ShoppingCart.Controllers
             }
             return View("DisplayProduct");
         }
+
         static List<int> thirdLargest(List<Purchases> topsellingproduct)
         {
             List<int> topthreehighestqty = new List<int>();

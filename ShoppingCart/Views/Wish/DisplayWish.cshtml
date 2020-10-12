@@ -1,22 +1,22 @@
 ﻿@{
     ViewData["Title"] = "Wishlist";
-    List<Product> wishList = (List<Product>)ViewData["wishlist"];
+    List<Wish> wishList = (List<Wish>)ViewData["wishlist"];
+    int count = (int)ViewData["count"];
 }
 
 @section Scripts
 {
-    <script src="~/js/purchases/displaypurchases.js"></script>
-    <script src="~/js/wish/wish.js"></script>
+    <script src="~/js/wish/displaywish.js"></script>
 }
 
 <style>
-    #empty {
+    *#empty {
         text-align: center;
         font-weight: bold;
         font-size: 36px;
     }
 
-    .dl-button {
+    .button3 {
         background-color: #4CAF50;
         border: none;
         color: white;
@@ -29,7 +29,7 @@
         cursor: pointer;
     }
 
-    .purchases-table {
+    .wish-table {
         width: 90%;
         margin-left: 5%;
         margin-right: 5%;
@@ -37,51 +37,58 @@
         border-spacing: 0 1em;
     }
 
-    .purchases-table button {
+    .wish-table button {
         width: 100%;
     }
 
-    .purchases-table td {
+    .wish-table td {
         padding: 10px;
     }
 
-    .purchases-table tr {
+    .wish-table tr {
         background-color: #f7f7f7;
     }
 
-    .purchases-table img {
+    .wish-table img {
         width: 80%;
-    }
-
-    .in-table {
-        border: none;
-    }
-
-    .purchases-table .in-table {
-        width: 100%;
-        position: relative;
-        top: 0px;
-        border-collapse: separate;
-        border-spacing: 0px;
-        text-align: left;
     }
 
     h2 {
         font-size: 16px;
     }
 
-    .purchases-table .in-table td {
-        padding: 3px;
-        vertical-align: top;
-    }
-
-    .cell {
-        vertical-align: top;
-    }
-
     .image {
         height: 300px;
         width: 100px;
+    }
+
+    .buttonforcart {
+        display: inline-block;
+        padding: 10px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: black;
+        background-color: lavender;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 9px #999;
+        position: fixed;
+        top: 100px;
+        right: 50px;
+    }
+
+    .buttonforcart:hover {
+        background-color: #57509f
+    }
+
+    .buttonforcart:active {
+        background-color: #57509f;
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
     }
 </style>
 
@@ -90,6 +97,11 @@
         <h1>My Wishlist</h1>
     </header>
     <a href="/Product/DisplayProduct"><u>Home</u></a> | <a href="/Logout/Index" id="logout"><u>Logout</u></a>
+</div>
+<div id="cart">
+    <form action="/Cart/DisplayCart">
+        <input type="submit" value="Cart: @count" class="buttonforcart" id="clickme" />
+    </form>
 </div>
 <div id="body">
     @if (wishList.Count() == 0)
@@ -101,11 +113,16 @@
     }
     else
     {
-        <table class="purchases-table">
+        <span id="empty" style="display:none">
+            <br /><br /><br />
+            Your Wishlist Is Empty
+        </span>
+        <br />
+        <table class="wish-table">
             @{
-                foreach (Product wish in wishList) @* code for generating table *@
+                foreach (Wish wish in wishList) @* code for generating table *@
                 {
-                    <tr>
+                    <tr id="@wish.Id">
                         <td width="50%">
                             <h2><b>@wish.Title</b></h2>
                             <br />
@@ -114,7 +131,8 @@
                             <p>@wish.Description</p>
                         </td>
                         <td>
-                            <button @*onclick=" window.open('@purchase.Link', '_target');"*@ type="button" class="dl-button">AddToCart</button>
+                            <button cart_id="@wish.Id" type="button" class="button3 add-to-cart">Add to Cart</button>
+                            <button remove_id="@wish.Id" type="button" class="button3 remove-from-wish">Remove from Wishlist</button>
                         </td>
                     </tr>
                 }

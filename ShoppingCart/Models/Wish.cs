@@ -7,6 +7,9 @@ namespace ShoppingCart.Models
 {
     public class Wish
     {
-        public int ProductId { set; get; }
+        public int Id { get; set; }
+        public string Image { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
     }
 }

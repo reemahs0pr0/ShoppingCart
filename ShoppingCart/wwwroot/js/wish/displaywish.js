@@ -1,4 +1,6 @@
-﻿window.onload = function () {
+﻿var count = 0;
+
+window.onload = function () {
     //create list of all 'Add To Cart' button
     let elemList = document.getElementsByClassName("add-to-cart");
 
@@ -7,16 +9,16 @@
         elemList[i].addEventListener("click", onAddToCart);
     }
 
-    //create list of all 'Wish' icon
-    let wish_list = document.getElementsByClassName("wish_icon");
+    //create list of all 'Remove from Wishlist' icon
+    let remove_wish_list = document.getElementsByClassName("remove-from-wish");
 
     //check each icon for onclick event
-    for (let i = 0; i < wish_list.length; i++) {
-        wish_list[i].addEventListener("click", onWish);
+    for (let i = 0; i < remove_wish_list.length; i++) {
+        remove_wish_list[i].addEventListener("click", onRemoveWish);
     }
 
     let elem = document.getElementById("logout");
-    elem.onclick = function() {
+    elem.onclick = function () {
         if (confirm("Confirm logout?")) {
             return true;
         }
@@ -27,7 +29,7 @@
 function onAddToCart(event) {
     //get product id for added item
     let elem = event.currentTarget;
-    let productId = elem.getAttribute("id");
+    let productId = elem.getAttribute("cart_id");
 
     let button = document.getElementById("clickme")
     let cartValue = button.getAttribute("value");
@@ -55,43 +57,24 @@ function onAddToCart(event) {
     }));
 }
 
-function onWish(event) {
+function onRemoveWish(event) {
+    //get product id for removed item
     let elem = event.currentTarget;
-    let productId = elem.getAttribute("wish_id");
+    let productId = elem.getAttribute("remove_id");
 
-    if (elem.getAttribute("src") === "/img/hearts_black.png") {
-        elem.setAttribute("src", "/img/hearts_color.png");
-        onAddWish(productId);
+    //hide row of removed item
+    let row = document.getElementById(productId.toString());
+    row.style.display = "none";
+    count = parseInt(count) + 1;
+
+    //create list of all 'Remove from Wishlist' icon
+    let remove_wish_list = document.getElementsByClassName("remove-from-wish");
+
+    //display empty wishlist message
+    if (count == remove_wish_list.length) {
+        document.getElementById("empty").style.display = "block";
     }
-    else {
-        elem.setAttribute("src", "/img/hearts_black.png");
-        onRemoveWish(productId);
-    }
-}
 
-
-function onAddWish(productId) {
-    //send AJAX request to add record to database
-    let xhr = new XMLHttpRequest();
-
-    //send to action method to receive AJAX call
-    xhr.open("POST", "/Wish/AddToWishList");
-    xhr.setRequestHeader("Content-Type", "application/json; charset=utf8");
-    xhr.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE) {
-            if (this.status == 200) {
-                let data = JSON.parse(this.responseText);
-                console.log("Successful operation: " + data.success);
-            }
-        }
-    };
-    xhr.send(JSON.stringify({
-        Id: productId,
-    }));
-
-}
-
-function onRemoveWish(productId) {
     //send AJAX request to remove record from database
     let xhr = new XMLHttpRequest();
 
