@@ -6,6 +6,14 @@
     for (let i = 0; i < elemList.length; i++) {
         elemList[i].addEventListener("click", onAddToCart);
     }
+
+    let elem = document.getElementById("logout");
+    elem.onclick = function() {
+        if (confirm("Confirm logout?")) {
+            return true;
+        }
+        return false;
+    }
 }
 
 function onAddToCart(event) {

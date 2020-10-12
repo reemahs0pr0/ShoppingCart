@@ -9,6 +9,7 @@
 {
     <script src="~/js/product/displayproduct.js"></script>
 }
+
 <head>
     <title>cart</title>
     <style>
@@ -104,7 +105,7 @@
         @if (ViewData["name"] != null)
         {
             @:Hello, <b>@ViewData["name"]</b>
-            <a href="/Purchases/DisplayPurchases" id="checkout"><u>My Purchases</u></a> @:| <a href="/Logout/Index"><u>Logout</u></a>
+            <a href="/Purchases/DisplayPurchases" id="checkout"><u>My Purchases</u></a> @:| <a href="/Logout/Index" id="logout"><u>Logout</u></a>
         }
         else
         {

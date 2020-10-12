@@ -3,6 +3,11 @@
     List<Purchases> purchases = (List<Purchases>)ViewData["purchases"];
 }
 
+@section Scripts
+{
+    <script src="~/js/purchases/displaypurchases.js"></script>
+}
+
 <style>
     #empty {
         text-align: center;
@@ -31,21 +36,21 @@
         border-spacing: 0 1em;
     }
 
-    .purchases-table button {
-        width: 100%;
-    }
+        .purchases-table button {
+            width: 100%;
+        }
 
-    .purchases-table td {
-        padding: 10px;
-    }
+        .purchases-table td {
+            padding: 10px;
+        }
 
-    .purchases-table tr {
-        background-color: #f7f7f7;
-    }
+        .purchases-table tr {
+            background-color: #f7f7f7;
+        }
 
-    .purchases-table img {
-        width: 80%;
-    }
+        .purchases-table img {
+            width: 80%;
+        }
 
     .in-table {
         border: none;
@@ -83,7 +88,7 @@
     <header>
         <h1>My Purchases</h1>
     </header>
-    <a href="/Product/DisplayProduct"><u>Home</u></a> | <a href="/Logout/Index"><u>Logout</u></a>
+    <a href="/Product/DisplayProduct"><u>Home</u></a> | <a href="/Logout/Index" id="logout"><u>Logout</u></a>
 </div>
 <div id="body">
     @if (purchases.Count() == 0)
