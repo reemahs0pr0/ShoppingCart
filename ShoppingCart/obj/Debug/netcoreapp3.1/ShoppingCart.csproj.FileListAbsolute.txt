@@ -93,3 +93,4 @@ C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.
 C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\Razor\Views\Product\DisplayProduct.cshtml.g.cs
 C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\Razor\Views\Purchases\DisplayPurchases.cshtml.g.cs
 C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\Razor\Views\Login\Index2.cshtml.g.cs
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\Razor\Views\Wish\DisplayWish.cshtml.g.cs
