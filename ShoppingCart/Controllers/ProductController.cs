@@ -7,15 +7,29 @@ using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Models;
 using ShoppingCart.Data;
 
+
 namespace ShoppingCart.Controllers
 {
     public class ProductController : Controller
     {
         public IActionResult DisplayProduct()
         {
+            //check if logged in
+            ViewData["loggedin"] = Int32.TryParse(HttpContext.Session.GetString("userid"),
+                out int userId);
+
             //create product list to store items details
             List<Product> productlists = ProductData.GetAllProducts();
 
+            //get WishList if logged in
+            List<Product> wishlist = new List<Product>();
+            if (Int32.TryParse(HttpContext.Session.GetString("userid"),
+              out int userId2) == true)
+            {
+                wishlist = WishData.GetWishList(productlists, userId2);
+            }
+
+            ViewData["wishlist"] = wishlist;
             //to get top selling based on past purchases and code implementation
             List<Product> topsellingproduct = ProductData.GetTopSellingProduct();
 

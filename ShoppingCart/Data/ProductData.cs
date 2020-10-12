@@ -1,4 +1,5 @@
-﻿using ShoppingCart.Models;
+﻿using Microsoft.AspNetCore.Http;
+using ShoppingCart.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -13,7 +14,6 @@ namespace ShoppingCart.Data
         {
             //create list to store all records from Product
             List<Product> productslist = new List<Product>();
-
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -33,9 +33,12 @@ namespace ShoppingCart.Data
                     };
                     productslist.Add(product);
                 }
+
             }
             return productslist;
         }
+
+
 
         public static List<Product> GetProductSearch(string search)
         {

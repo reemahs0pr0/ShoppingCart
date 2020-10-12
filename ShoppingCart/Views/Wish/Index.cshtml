@@ -1,0 +1,124 @@
+﻿@{
+    ViewData["Title"] = "My Purchases";
+    List<Product> wishList = (List<Product>)ViewData["wishlist"];
+}
+
+@section Scripts
+{
+    <script src="~/js/purchases/displaypurchases.js"></script>
+    <script src="~/js/wish/wish.js"></script>
+}
+
+<style>
+    #empty {
+        text-align: center;
+        font-weight: bold;
+        font-size: 36px;
+    }
+
+    .dl-button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    .purchases-table {
+        width: 90%;
+        margin-left: 5%;
+        margin-right: 5%;
+        border-collapse: separate;
+        border-spacing: 0 1em;
+    }
+
+        .purchases-table button {
+            width: 100%;
+        }
+
+        .purchases-table td {
+            padding: 10px;
+        }
+
+        .purchases-table tr {
+            background-color: #f7f7f7;
+        }
+
+        .purchases-table img {
+            width: 80%;
+        }
+
+    .in-table {
+        border: none;
+    }
+
+    .purchases-table .in-table {
+        width: 100%;
+        position: relative;
+        top: 0px;
+        border-collapse: separate;
+        border-spacing: 0px;
+        text-align: left;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    .purchases-table .in-table td {
+        padding: 3px;
+        vertical-align: top;
+    }
+
+    .cell {
+        vertical-align: top;
+    }
+
+    .image {
+        height: 300px;
+        width: 100px;
+    }
+</style>
+
+<div id="header">
+    <header>
+        <h1>My Purchases</h1>
+    </header>
+    <a href="/Product/DisplayProduct"><u>Home</u></a> | <a href="/Logout/Index" id="logout"><u>Logout</u></a>
+</div>
+<div id="body">
+    @if (wishList.Count() == 0)
+    {
+        <span id="empty" style="display:block">
+            <br /><br /><br />
+            Your Wishlist Is Empty
+        </span>
+    }
+    else
+    {
+        <table class="purchases-table">
+            @{
+                foreach (Product wish in wishList) @* code for generating table *@
+                {
+                    <tr>
+                        <td width="50%">
+                            <h2><b>@wish.Title</b></h2>
+                            <br />
+                            <img src="/img/@wish.Image" class="image" />
+                            <br />
+                            <p>@wish.Description</p>
+                        </td>
+                        <td>
+                            <button @*onclick=" window.open('@purchase.Link', '_target');"*@ type="button" class="dl-button">AddToCart</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    }
+</div>
