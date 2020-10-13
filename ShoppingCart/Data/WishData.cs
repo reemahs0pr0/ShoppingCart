@@ -11,6 +11,7 @@ namespace ShoppingCart.Data
     {
         public static List<Wish> GetWishList(string userId)
         {
+            //create list to store all records from Cart
             List<Wish> wishList = new List<Wish>();
 
             using (SqlConnection conn = new SqlConnection(connectionString))

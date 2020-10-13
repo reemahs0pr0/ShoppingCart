@@ -1,11 +1,19 @@
 ﻿//declare global variable of amount list so all functions can access and make changes to it
 var amountList = [];
+var noOfProducts = 6; //update total number of products here 
+
+for (var i = 0; i < noOfProducts; i++) {
+    amountList[i] = 0;
+}
 
 window.onload = function () {
     //store all amount into an array
     amounts = document.getElementsByClassName("amount");
+
     for (let i = 0; i < amounts.length; i++) {
-        amountList[i] = amounts[i].innerHTML;
+        let elem = amounts[i];
+        let productId = elem.getAttribute("amount_id");
+        amountList[productId - 1] = amounts[i].innerHTML;
     }
 
     //create list of all quantity input boxes
@@ -35,11 +43,18 @@ function updateQuantity(event) {
     //get new quantity
     let elem = event.currentTarget;
     let quantity = elem.value;
+    let price = 0;
 
     //get the price for the item
     let productId = elem.getAttribute("quantity_id");
     let priceList = document.getElementsByClassName("price");
-    let price = priceList[productId - 1].innerHTML;
+    for (let i = 0; i < priceList.length; i++) {
+        let elem = priceList[i];
+        let id = elem.getAttribute("price_id");
+        if (id == productId) {
+            price = priceList[i].innerHTML;
+        }
+    }
 
     //calc new amount and update in array and html
     let amount = price * quantity;

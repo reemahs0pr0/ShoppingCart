@@ -1,4 +1,5 @@
-﻿var count = 0;
+﻿//declare global variable of count so all functions can access and make changes to it
+var count = 0;
 
 window.onload = function () {
     //create list of all 'Add To Cart' button
