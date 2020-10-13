@@ -21,6 +21,8 @@ namespace ShoppingCart.Controllers
             // to highlight "Shopping" as the selected menu-item
             ViewData["Is_Shopping"] = "menu_hilite";
 
+            ViewData["total"] = TempData["total"] as string;
+
             return View();
         }
         public List<Purchases> FinalList()
@@ -49,6 +51,7 @@ namespace ShoppingCart.Controllers
         {
             //get records from cart
             List<Cart> cart = CartData.GetCart(HttpContext.Session.GetString("userid"));
+            double total = GetTotalPaid(cart);
 
             //add order and ordetails records based on cart
             PurchasesData.AddOrder(HttpContext.Session.GetString("userid"));
@@ -71,7 +74,30 @@ namespace ShoppingCart.Controllers
             //erase all records from cart
             CartData.DeleteCart(HttpContext.Session.GetString("userid"));
 
+            TempData["total"] = total.ToString("#0.00");
+
             return RedirectToAction("DisplayPurchases");
+        }
+
+        public double GetTotalPaid(List<Cart> cart)
+        {
+            //create variable to store total price
+            double total = 0;
+
+            //add price of each item into total
+            foreach (var item in cart)
+            {
+                total += item.Price * item.Quantity;
+            }
+
+            if (HttpContext.Session.GetString("couponcode") == null)
+            {
+                return total;
+            }
+            else
+            {
+                return total * 0.9;
+            }
         }
     }
 }
