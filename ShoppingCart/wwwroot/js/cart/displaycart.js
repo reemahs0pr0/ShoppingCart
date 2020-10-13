@@ -36,6 +36,10 @@ window.onload = function () {
     //create onclick event for checkout
     let checkout = document.getElementById("checkout");
     checkout.addEventListener("click", checkTotal);
+
+    //create onclick event for checkout
+    let submitCoupon = document.getElementById("validBtn");
+    submitCoupon.addEventListener("click", onSubmitCoupon);
 }
 
 //function for update quantity
@@ -59,7 +63,14 @@ function updateQuantity(event) {
     //calc new amount and update in array and html
     let amount = price * quantity;
     amountList[productId - 1] = amount;
-    amounts[productId - 1].innerHTML = amount.toFixed(2);
+    let amounts = document.getElementsByClassName("amount");
+    for (let i = 0; i < amounts.length; i++) {
+        let elem = amounts[i];
+        let id = elem.getAttribute("amount_id");
+        if (id == productId) {
+            amounts[i].innerHTML = amount.toFixed(2);
+        }
+    }
 
     //function to sum amount of each item
     SumAmount();
@@ -150,5 +161,44 @@ function checkTotal(event) {
     if (total == 0.00) {
         alert("Your cart is empty!");
         elem.setAttribute("href", "#");
+    }
+}
+
+//function to validate coupon
+function onSubmitCoupon(event) {
+
+    let msg = document.getElementById("msg");
+
+    // get couponId entered by user
+    let elemCouponId = document.getElementById("couponCode");
+    let couponId = elemCouponId.value.trim();
+
+    if (couponId.length !== 0) {
+        // send AJAX request to server to validate coupon from database
+        let xhr = new XMLHttpRequest();
+
+        //send to action method to receive AJAX call
+        xhr.open("POST", "/Coupon/ValidateCoupon");
+        xhr.setRequestHeader("Content-Type", "application/json; charset=utf8");
+        xhr.onreadystatechange = function () {
+            if (this.readyState === XMLHttpRequest.DONE) {
+                if (this.status == 200) {
+                    let data = JSON.parse(this.responseText);
+                    console.log("Successful operation: " + data.message);
+
+                    // result from validate coupon
+                    msg.innerHTML = data.message;
+                }
+            }
+        };
+        // send couponId to controller as identifier
+        let data = {
+            CouponCode: couponId
+        };
+        xhr.send(JSON.stringify(data));
+    }
+    else {
+        // if empty coupon code field entered
+        msg.innerHTML = "Coupon field is empty";
     }
 }

@@ -87,6 +87,18 @@
         <a href="/Login/Index2" id="checkout"><u>Checkout</u></a>
     }
     <span class="total"><b>Total: $<span id="total_price">@total</span></b></span>
+    @if (loggedIn)
+    {
+        <table>
+            <tr>
+                <td><input id="couponCode" name="couponCode" placeholder="Enter Coupon Code..."/></td>
+                <td><input id="validBtn" type="submit" /></td>
+            </tr>
+            <tr>
+                <td colspan="2"><span id="msg" style="font-weight:bold;color:red"></span></td>
+            </tr>
+        </table>
+    }
 </div>
 <div id="body">
     @if (total == "0.00")
