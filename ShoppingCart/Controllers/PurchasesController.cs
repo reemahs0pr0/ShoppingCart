@@ -6,11 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Models;
 using ShoppingCart.Data;
 using Microsoft.AspNetCore.Http;
+using ShoppingCart.Db;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ShoppingCart.Controllers
 {
     public class PurchasesController : Controller
     {
+        private readonly DbGallery db;
+
+        public PurchasesController(DbGallery db)
+        {
+            this.db = db;
+        }
+
         //when user click 'My Purchases'
         public IActionResult DisplayPurchases()
         {
@@ -28,18 +37,48 @@ namespace ShoppingCart.Controllers
         public List<Purchases> FinalList()
         {
             //get list of all purchases and activation codes from db
-            List<Purchases> purchases = PurchasesData.GetPurchases(HttpContext.Session.GetString("userid"));
-            List<ActivationCode> codes = PurchasesData.GetActivationCodes(HttpContext.Session.GetString("userid"));
-
+            List<Order> orders = db.Orders.Where(x => x.UserId == HttpContext.Session.GetString("userid")).OrderByDescending(x => x.Id).ToList();
+            List<OrderDetail> orderDetails;
+            List<ActivationCode> activationCodes;
+            List<Purchases> purchases = new List<Purchases>();
+            List<ActivationCode> activationCodesOverall = new List<ActivationCode>();
+            foreach(Order order in orders)
+            {
+                orderDetails = db.OrderDetails.Where(x => x.OrderId == order.Id).ToList();
+                foreach (OrderDetail od in orderDetails)
+                {
+                    purchases.Add(new Purchases
+                    {
+                        OrderId = order.Id,
+                        ProductId = od.ProductId,
+                        Quantity = od.Quantity,
+                        PurchaseDate = order.PurchaseDate,
+                        Image = od.Product.Image,
+                        Title = od.Product.Title,
+                        Description = od.Product.Description,
+                        Link = od.Product.Link
+                    });
+                }
+                activationCodes = db.ActivationCodes.Where(x => x.OrderId == order.Id).ToList();
+                foreach (ActivationCode code in activationCodes)
+                {
+                    activationCodesOverall.Add(new ActivationCode
+                    {
+                        Id = code.Id,
+                        OrderId = order.Id,
+                        ProductId = code.ProductId
+                    });
+                }
+            }
 
             // combines the purchases and activation list
             foreach (Purchases purchase in purchases)
             {
-                foreach (ActivationCode code in codes)
+                foreach (ActivationCode code in activationCodesOverall)
                 {
                     if (code.OrderId == purchase.OrderId && code.ProductId == purchase.ProductId)
                     {
-                        purchase.ActivationCode.Add((string)code.Code);
+                        purchase.ActivationCode.Add(code.Id);
                     }
                 }
             }
@@ -50,29 +89,42 @@ namespace ShoppingCart.Controllers
         public IActionResult DisplayNewPurchases()
         {
             //get records from cart
-            List<Cart> cart = CartData.GetCart(HttpContext.Session.GetString("userid"));
+            List<Cart> cart = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).ToList();
             double total = GetTotalPaid(cart);
 
-            //add order and ordetails records based on cart
-            PurchasesData.AddOrder(HttpContext.Session.GetString("userid"));
-            PurchasesData.AddOrderDetails(HttpContext.Session.GetString("userid"));
-
-            //create activation code for every purchased item and store in db
-            foreach (Cart item in cart)
+            //add order based on cart
+            db.Orders.Add(new Order
             {
+                UserId = HttpContext.Session.GetString("userid"),
+                PurchaseDate = DateTime.Now.ToString("dd-MM-yyyy")
+            });
+
+            int orderId = db.Orders.Max(x => x.Id);
+            foreach(Cart item in cart)
+            {
+                //add order details based on cart
+                db.OrderDetails.Add(new OrderDetail
+                {
+                    OrderId = orderId,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity
+                });
+
                 for (int i = 0; i < item.Quantity; i++)
                 {
-                    ActivationCode code = new ActivationCode
+                    //create activation code for every purchased item and store in db
+                    db.ActivationCodes.Add(new ActivationCode
                     {
-                        Code = Guid.NewGuid().ToString(),
-                        ProductId = item.Id
-                    };
-                    PurchasesData.AddActivationCode(code, HttpContext.Session.GetString("userid"));
+                        Id = Guid.NewGuid().ToString(),
+                        OrderId = orderId,
+                        ProductId = item.ProductId
+                    });
                 }
-            }
 
-            //erase all records from cart
-            CartData.DeleteCart(HttpContext.Session.GetString("userid"));
+                //erase all records from cart
+                db.Carts.Remove(item);
+            }
+            db.SaveChanges();
 
             TempData["total"] = total.ToString("#0.00");
 
@@ -87,7 +139,7 @@ namespace ShoppingCart.Controllers
             //add price of each item into total
             foreach (var item in cart)
             {
-                total += item.Price * item.Quantity;
+                total += item.Product.Price * item.Quantity;
             }
 
             if (HttpContext.Session.GetString("couponcode") == null)
