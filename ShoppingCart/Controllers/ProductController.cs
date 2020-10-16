@@ -6,32 +6,41 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Models;
 using ShoppingCart.Data;
+using ShoppingCart.Db;
 
 namespace ShoppingCart.Controllers
 {
     public class ProductController : Controller
     {
+        private readonly DbGallery db;
+
+        public ProductController(DbGallery db)
+        {
+            this.db = db;
+        }
+
         public IActionResult DisplayProduct()
         {
             //create product list to store items details
-            List<Product> productlists = ProductData.GetAllProducts();
+            List<Product> productlists = db.Products.ToList();
 
+            /*
             //to get top selling based on past purchases and code implementation
             List<Purchases> topsellingproduct = ProductData.GetTopSellingProduct();
             ViewData["topsellingproduct"] = topsellingproduct;
 
             //to get list of top 3 unique quantity values
             List<int> topthreeqty = thirdLargest(topsellingproduct);
-            ViewData["topthreeqty"] = topthreeqty;
+            ViewData["topthreeqty"] = topthreeqty;*/
 
             //check if there is any pre-existing item in cart
-            int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
+            int count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Count();
 
             //get WishList if logged in
-            List<Wish> wishlist = new List<Wish>();
+            List<Wishlist> wishlist = new List<Wishlist>();
             if (HttpContext.Session.GetString("name") != null)
             {
-                wishlist = WishData.GetWishList(HttpContext.Session.GetString("userid"));
+                wishlist = db.Wishlists.Where(x => x.UserId == HttpContext.Session.GetString("userid")).ToList();
             }
 
             //send data to View
@@ -53,12 +62,12 @@ namespace ShoppingCart.Controllers
         public IActionResult Search(string search)
         {
             //list of searched products from db based on description
-            List<Product> searchedproductlists = ProductData.GetProductSearch(search);
+            List<Product> searchedproductlists = db.Products.Where(x => x.Description.Contains(search)).ToList();
 
             if (searchedproductlists.Count == 0)
             {
                 //check if there is any pre-existing item in cart
-                int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
+                int count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Count();
 
                 //send data to View
                 ViewData["count"] = count;
@@ -73,6 +82,7 @@ namespace ShoppingCart.Controllers
             }
             else
             {
+                /*
                 //to get top selling based on past purchases and code implementation
                 List<Purchases> topsellingproduct = ProductData.GetTopSellingProduct();
 
@@ -81,16 +91,16 @@ namespace ShoppingCart.Controllers
                 //to get list of top 3 unique quantity values
                 List<int> topthreeqty = thirdLargest(topsellingproduct);
 
-                ViewData["topthreeqty"] = topthreeqty;
+                ViewData["topthreeqty"] = topthreeqty;*/
 
                 //check if there is any pre-existing item in cart
-                int count = CartData.CheckLastInCart(HttpContext.Session.GetString("userid"));
+                int count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Count();
 
                 //get WishList if logged in
-                List<Wish> wishlist = new List<Wish>();
+                List<Wishlist> wishlist = new List<Wishlist>();
                 if (HttpContext.Session.GetString("name") != null)
                 {
-                    wishlist = WishData.GetWishList(HttpContext.Session.GetString("userid"));
+                    wishlist = db.Wishlists.Where(x => x.UserId == HttpContext.Session.GetString("userid")).ToList();
                 }
 
                 //send data to View
@@ -109,7 +119,7 @@ namespace ShoppingCart.Controllers
             return View("DisplayProduct");
         }
 
-        static List<int> thirdLargest(List<Purchases> topsellingproduct)
+        /*static List<int> thirdLargest(List<Purchases> topsellingproduct)
         {
             List<int> topthreehighestqty = new List<int>();
 
@@ -145,6 +155,6 @@ namespace ShoppingCart.Controllers
             topthreehighestqty.Add(third);
 
             return topthreehighestqty;
-        }
+        }*/
     }
 }

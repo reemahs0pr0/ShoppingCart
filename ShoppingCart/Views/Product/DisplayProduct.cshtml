@@ -3,9 +3,9 @@
     List<Product> productslist = (List<Product>)ViewData["productlists"];
     List<Product> foundproductslist = (List<Product>)ViewData["foundproducts"];
     int count = (int)ViewData["count"];
-    List<Purchases> topsellingproduct = (List<Purchases>)ViewData["topsellingproduct"];
-    List<int> topthreeqty = (List<int>)ViewData["topthreeqty"];
-    List<Wish> wishlist = (List<Wish>)ViewData["wishlist"];
+    //List<Purchases> topsellingproduct = (List<Purchases>)ViewData["topsellingproduct"];
+    //List<int> topthreeqty = (List<int>)ViewData["topthreeqty"];
+    List<Wishlist> wishlist = (List<Wishlist>)ViewData["wishlist"];
 
     if (productslist != null)
     {
@@ -13,7 +13,7 @@
         {
             foreach (var wish in wishlist)
             {
-                if (product.Id == wish.Id)
+                if (product.Id == wish.ProductId)
                 {
                     product.Wish = true;
                 }
@@ -26,7 +26,7 @@
         {
             foreach (var wish in wishlist)
             {
-                if (product.Id == wish.Id)
+                if (product.Id == wish.ProductId)
                 {
                     product.Wish = true;
                 }
@@ -173,7 +173,7 @@
                                             Add to Cart
                                         </button>
                                     </div>
-                                    <div style="align-content:center">
+                                    @*<div style="align-content:center">
                                         @for (int k = 0; k < topsellingproduct.Count; k++)
                                         {
                                             if (topsellingproduct[k].ProductId == productslist[i + j].Id)
@@ -190,7 +190,7 @@
                                                 { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
                                             }
                                         }
-                                    </div>
+                                    </div>*@
                                     @if (ViewData["name"] != null) // generates wish icon according to loggedin status
                                     {
                                         if (productslist[i + j].Wish == false)
@@ -240,7 +240,7 @@
                                                 Add to Cart
                                             </button>
                                         </div>
-                                        <div style="align-content:center">
+                                        @*<div style="align-content:center">
                                             @for (int k = 0; k < topsellingproduct.Count; k++)
                                             {
                                                 if (topsellingproduct[k].ProductId == foundproductslist[i + j].Id)
@@ -257,7 +257,7 @@
                                                     { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
                                                 }
                                             }
-                                        </div>
+                                        </div>*@
                                         @if (ViewData["name"] != null) // generates wish icon according to loggedin status
                                         {
                                             if (foundproductslist[i + j].Wish == false)
