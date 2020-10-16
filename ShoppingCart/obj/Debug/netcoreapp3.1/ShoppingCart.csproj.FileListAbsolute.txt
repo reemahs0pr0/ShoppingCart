@@ -132,3 +132,6 @@ C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\bin\Debug\netcoreapp3.
 C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.csproj.CoreCompileInputs.cache
 C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\ShoppingCart.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\bin\Debug\netcoreapp3.1\EntityFramework.SqlServer.dll
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\bin\Debug\netcoreapp3.1\EntityFramework.dll
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\bin\Debug\netcoreapp3.1\System.CodeDom.dll

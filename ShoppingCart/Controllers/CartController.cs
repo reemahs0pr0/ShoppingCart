@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ShoppingCart.Data;
 using ShoppingCart.Db;
 using ShoppingCart.Models;
 
@@ -114,7 +113,6 @@ namespace ShoppingCart.Controllers
             int productId = Convert.ToInt32(remove.Id);
 
             //send identifier to database to remove record
-            CartData.RemoveItem(HttpContext.Session.GetString("userid"), productId);
             Cart cart = (Cart)db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.ProductId == productId);
             db.Carts.Remove(cart);
             db.SaveChanges();

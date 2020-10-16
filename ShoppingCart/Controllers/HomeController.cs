@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ShoppingCart.Models;
-using ShoppingCart.Data;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace ShoppingCart.Controllers

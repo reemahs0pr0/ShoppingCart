@@ -61,6 +61,7 @@ namespace ShoppingCart
 
             db.Database.EnsureDeleted();
             db.Database.EnsureCreated();
+            new DbSeedData(db).Initialisation();
         }
     }
 }

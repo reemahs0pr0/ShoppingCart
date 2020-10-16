@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Models;
-using ShoppingCart.Data;
 using Microsoft.AspNetCore.Http;
 using ShoppingCart.Db;
 using System.Security.Cryptography.X509Certificates;

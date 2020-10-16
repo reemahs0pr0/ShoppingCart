@@ -22,9 +22,9 @@ namespace ShoppingCart.Db
 
         protected override void OnModelCreating(ModelBuilder model)
         {
-            model.Entity<Wishlist>().HasAlternateKey(x => new { x.UserId, x.ProductId });
-            model.Entity<Cart>().HasAlternateKey(x => new { x.UserId, x.ProductId });
-            model.Entity<OrderDetail>().HasAlternateKey(x => new { x.OrderId, x.ProductId });
+            model.Entity<Wishlist>().HasKey(x => new { x.UserId, x.ProductId });
+            model.Entity<Cart>().HasKey(x => new { x.UserId, x.ProductId });
+            model.Entity<OrderDetail>().HasKey(x => new { x.OrderId, x.ProductId });
         }
 
         public DbSet<User> Users { get; set; }

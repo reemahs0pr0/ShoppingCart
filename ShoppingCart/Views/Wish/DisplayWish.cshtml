@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Wishlist";
-    List<Wish> wishList = (List<Wish>)ViewData["wishlist"];
+    List<Wishlist> wishList = (List<Wishlist>)ViewData["wishlist"];
     int count = (int)ViewData["count"];
 }
 
@@ -120,19 +120,19 @@
         <br />
         <table class="wish-table">
             @{
-                foreach (Wish wish in wishList) @* code for generating table *@
+                foreach (Wishlist wish in wishList) @* code for generating table *@
                 {
-                    <tr id="@wish.Id">
+                    <tr id="@wish.ProductId">
                         <td width="50%">
-                            <h2><b>@wish.Title</b></h2>
+                            <h2><b>@wish.Product.Title</b></h2>
                             <br />
-                            <img src="/img/@wish.Image" class="image" />
+                            <img src="/img/@wish.Product.Image" class="image" />
                             <br />
-                            <p>@wish.Description</p>
+                            <p>@wish.Product.Description</p>
                         </td>
                         <td>
-                            <button cart_id="@wish.Id" type="button" class="button3 add-to-cart">Add to Cart</button>
-                            <button remove_id="@wish.Id" type="button" class="button3 remove-from-wish">Remove from Wishlist</button>
+                            <button cart_id="@wish.ProductId" type="button" class="button3 add-to-cart">Add to Cart</button>
+                            <button remove_id="@wish.ProductId" type="button" class="button3 remove-from-wish">Remove from Wishlist</button>
                         </td>
                     </tr>
                 }
