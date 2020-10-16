@@ -193,7 +193,7 @@ function onSubmitCoupon(event) {
         };
         // send couponId to controller as identifier
         let data = {
-            CouponCode: couponId
+            Id: couponId
         };
         xhr.send(JSON.stringify(data));
     }

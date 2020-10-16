@@ -5,21 +5,33 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Data;
+using ShoppingCart.Db;
 using ShoppingCart.Models;
 
 namespace ShoppingCart.Controllers
 {
     public class CouponController : Controller
     {
+        private readonly DbGallery db;
+
+        public CouponController(DbGallery db)
+        {
+            this.db = db;
+        }
+
         [HttpPost]
         public IActionResult ValidateCoupon([FromBody] Coupon coupon)
         {
-            string couponCode = coupon.CouponCode;
             // invoke action to validate coupon
-            if (CouponData.ValidateCoupon(couponCode) == true && HttpContext.Session.GetString("couponcode") == null)
+            int couponLeft = db.Coupons.Where(x => x.Id == coupon.Id).Count();
+
+            if (couponLeft != 0 && HttpContext.Session.GetString("couponcode") == null)
             {
-                HttpContext.Session.SetString("couponcode", couponCode);
-                CouponData.UseCoupon(couponCode);
+                HttpContext.Session.SetString("couponcode", coupon.Id);
+                Coupon usedCoupon = (Coupon)db.Coupons.Where(x => x.Id == coupon.Id);
+                db.Coupons.Remove(usedCoupon);
+                db.SaveChanges();
+
                 // if user entered coupon is validated
                 return Json(new
                 {

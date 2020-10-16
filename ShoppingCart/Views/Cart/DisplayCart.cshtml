@@ -6,7 +6,7 @@
     List<string> amt = new List<string>();
     foreach (var item in cart)
     {
-        amt.Add((item.Price * item.Quantity).ToString("#0.00"));
+        amt.Add((item.Product.Price * item.Quantity).ToString("#0.00"));
     }
 }
 
@@ -118,28 +118,28 @@
         <table>
             @for (int i = 0; i < cart.Count; i++)
             {
-                <tr id=@cart[i].Id>
+                <tr id=@cart[i].ProductId>
                     <td>
                         <div class="product_container text-center">
                             @{
-                                string link = ViewData["images_prefix"] + cart[i].Image;
+                                string link = ViewData["images_prefix"] + cart[i].Product.Image;
                             }
                             <img src="@link"/>
-                            <b>@cart[i].Title</b>
+                            <b>@cart[i].Product.Title</b>
                             <br />
-                            @cart[i].Description
+                            @cart[i].Product.Description
                         </div>
                     </td>
                     <td>
                         <div class="details">
-                            Unit Price: $<span class="price" price_id=@cart[i].Id>@cart[i].Price</span>
+                            Unit Price: $<span class="price" price_id=@cart[i].ProductId>@cart[i].Product.Price</span>
                             <br /><br />
-                            Quantity: <input class="quantity" type="number" value=@cart[i].Quantity min="1" quantity_id=@cart[i].Id>
+                            Quantity: <input class="quantity" type="number" value=@cart[i].Quantity min="1" quantity_id=@cart[i].ProductId>
                             <br /><br />
-                            Amount: $<span class="amount" amount_id=@cart[i].Id>@amt[i]</span>
+                            Amount: $<span class="amount" amount_id=@cart[i].ProductId>@amt[i]</span>
                         </div>
                     </td>
-                    <td><image src="/img/remove_icon.png" class="remove_icon" product_id=@cart[i].Id /></td>
+                    <td><image src="/img/remove_icon.png" class="remove_icon" product_id=@cart[i].ProductId /></td>
                 </tr>
             }
         </table>

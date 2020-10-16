@@ -68,7 +68,7 @@ namespace ShoppingCart.Controllers
                 db.SaveChanges();
 
                 //set 'name' key with name of user
-                var name = db.Users.Where(x => x.Id == userId.ToString());
+                var name = db.Users.Where(x => x.Id == userId.ToString()).Select(x => x.Name);
                 HttpContext.Session.SetString("name", name.ToString());
 
                 return RedirectToAction("DisplayProduct", "Product");
@@ -79,7 +79,7 @@ namespace ShoppingCart.Controllers
 
                 //set session with user id and name
                 HttpContext.Session.SetString("userid", userId.ToString());
-                var name = db.Users.Where(x => x.Id == userId.ToString());
+                var name = db.Users.Where(x => x.Id == userId.ToString()).Select(x => x.Name);
                 HttpContext.Session.SetString("name", name.ToString());
 
                 return RedirectToAction("DisplayProduct", "Product");
@@ -129,7 +129,7 @@ namespace ShoppingCart.Controllers
                 db.SaveChanges();
 
                 //set 'name' key with name of user
-                var name = db.Users.Where(x => x.Id == userId.ToString());
+                var name = db.Users.Where(x => x.Id == userId.ToString()).Select(x => x.Name);
                 HttpContext.Session.SetString("name", name.ToString());
 
                 return RedirectToAction("DisplayCart", "Cart");
