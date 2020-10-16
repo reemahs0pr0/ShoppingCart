@@ -9,13 +9,17 @@ namespace ShoppingCart.Models
 {
     public class User
     {
-        public string UserId { get; set; }
+        public string Id { get; set; }
 
         [DisplayName("Username:")]
+        [Required]
         public string Username { get; set; }
 
         [DisplayName("Password:")]
         [DataType(DataType.Password)]
+        [Required]
         public string Password { get; set; }
+        [Required]
+        public string Name { get; set; }
     }
 }

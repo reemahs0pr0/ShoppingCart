@@ -7,6 +7,6 @@ namespace ShoppingCart.Models
 {
     public class Coupon
     {
-        public string CouponCode { get; set; }
+        public string Id { get; set; }
     }
 }

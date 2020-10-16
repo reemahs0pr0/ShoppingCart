@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.Models
 {
-    public class ActivationCode
+    public class Wishlist
     {
-        public string Id { get; set; }
         [Required]
-        public int OrderId { get; set; }
-        public virtual Order Order { get; set; }
-        public virtual OrderDetail OrderDetails { get; set; }
+        public string UserId { get; set; }
+        public virtual User User { get; set; }
         [Required]
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }
