@@ -20,7 +20,7 @@
             }
         }
     }
-    else
+    else if (foundproductslist != null)
     {
         foreach (var product in foundproductslist)
         {
@@ -139,7 +139,7 @@
     </div>
     <div id="body">
         <form action="/Cart/DisplayCart">
-            <input type="submit" value="Cart: @count" class="buttonforcart" id="clickme"/>
+            <input type="submit" value="Cart: @count" class="buttonforcart" id="clickme" />
         </form>
         <br />
         <div id="search">
@@ -147,7 +147,7 @@
                 <input id="searchid" type="search" class="search-field" placeholder="Looking for?" name="search" value="@ViewData["search"]" />
                 <button id="searchitem" type="submit" class="button2">
                     <span>Search</span>
-                    <img src="/img/mglass.png"/>
+                    <img src="/img/mglass.png" />
                 </button>
             </form>
         </div>
@@ -174,32 +174,32 @@
                                         </button>
                                     </div>
                                     @*<div style="align-content:center">
-                                        @for (int k = 0; k < topsellingproduct.Count; k++)
-                                        {
-                                            if (topsellingproduct[k].ProductId == productslist[i + j].Id)
+                                            @for (int k = 0; k < topsellingproduct.Count; k++)
                                             {
-                                                if (topsellingproduct[k].Quantity == topthreeqty[0])
-                                                {<span style="color:darkred"><b>BEST SELLING!</b></span> }
+                                                if (topsellingproduct[k].ProductId == productslist[i + j].Id)
+                                                {
+                                                    if (topsellingproduct[k].Quantity == topthreeqty[0])
+                                                    {<span style="color:darkred"><b>BEST SELLING!</b></span> }
 
-                                                else if (topsellingproduct[k].Quantity == topthreeqty[1])
-                                                { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
+                                                    else if (topsellingproduct[k].Quantity == topthreeqty[1])
+                                                    { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
 
-                                                else if (topsellingproduct[k].Quantity == topthreeqty[2])
-                                                { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
-                                                else
-                                                { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
+                                                    else if (topsellingproduct[k].Quantity == topthreeqty[2])
+                                                    { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
+                                                    else
+                                                    { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
+                                                }
                                             }
-                                        }
-                                    </div>*@
+                                        </div>*@
                                     @if (ViewData["name"] != null) // generates wish icon according to loggedin status
                                     {
                                         if (productslist[i + j].Wish == false)
                                         {
-                                            <img src="~/img/hearts_black.png" class="wish_icon" wish_id="@productslist[i + j].Id"/>
+                                            <img src="~/img/hearts_black.png" class="wish_icon" wish_id="@productslist[i + j].Id" />
                                         }
                                         else
                                         {
-                                            <img src="~/img/hearts_color.png" class="wish_icon" wish_id="@productslist[i + j].Id"/>
+                                            <img src="~/img/hearts_color.png" class="wish_icon" wish_id="@productslist[i + j].Id" />
                                         }
                                     }
                                 </div>
@@ -241,32 +241,32 @@
                                             </button>
                                         </div>
                                         @*<div style="align-content:center">
-                                            @for (int k = 0; k < topsellingproduct.Count; k++)
-                                            {
-                                                if (topsellingproduct[k].ProductId == foundproductslist[i + j].Id)
+                                                @for (int k = 0; k < topsellingproduct.Count; k++)
                                                 {
-                                                    if (topsellingproduct[k].Quantity == topthreeqty[0])
-                                                    {<span style="color:darkred"><b>BEST SELLING!</b></span> }
+                                                    if (topsellingproduct[k].ProductId == foundproductslist[i + j].Id)
+                                                    {
+                                                        if (topsellingproduct[k].Quantity == topthreeqty[0])
+                                                        {<span style="color:darkred"><b>BEST SELLING!</b></span> }
 
-                                                    else if (topsellingproduct[k].Quantity == topthreeqty[1])
-                                                    { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
+                                                        else if (topsellingproduct[k].Quantity == topthreeqty[1])
+                                                        { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
 
-                                                    else if (topsellingproduct[k].Quantity == topthreeqty[2])
-                                                    { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
-                                                    else
-                                                    { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
+                                                        else if (topsellingproduct[k].Quantity == topthreeqty[2])
+                                                        { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
+                                                        else
+                                                        { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
+                                                    }
                                                 }
-                                            }
-                                        </div>*@
+                                            </div>*@
                                         @if (ViewData["name"] != null) // generates wish icon according to loggedin status
                                         {
                                             if (foundproductslist[i + j].Wish == false)
                                             {
-                                                <img src="~/img/hearts_black.png" class="wish_icon" wish_id="@foundproductslist[i + j].Id"/>
+                                                <img src="~/img/hearts_black.png" class="wish_icon" wish_id="@foundproductslist[i + j].Id" />
                                             }
                                             else
                                             {
-                                                <img src="~/img/hearts_color.png" class="wish_icon" wish_id="@foundproductslist[i + j].Id"/>
+                                                <img src="~/img/hearts_color.png" class="wish_icon" wish_id="@foundproductslist[i + j].Id" />
                                             }
                                         }
                                     </div>
@@ -290,6 +290,7 @@
         else
         {
             <p>The item you are searching for is not found.</p>
+            <a href="/Product/DisplayProduct"><b>Back to Gallery</b></a>
         }
     }
 </body>

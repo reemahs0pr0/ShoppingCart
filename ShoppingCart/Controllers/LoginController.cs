@@ -52,7 +52,7 @@ namespace ShoppingCart.Controllers
 
                 //overwrite existing cart with new cart 
                 //delete old cart
-                List<Cart> carts = db.Carts.Where(x => x.UserId == userId).ToList();
+                List<Cart> carts = db.Carts.Where(x => x.UseridOrSessionid == userId).ToList();
                 foreach (Cart cart in carts)
                 {
                     db.Carts.Remove(cart);
@@ -60,10 +60,10 @@ namespace ShoppingCart.Controllers
                 db.SaveChanges();
 
                 //update new cart with user id
-                List<Cart> carts1 = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("sessionid")).ToList();
+                List<Cart> carts1 = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("sessionid")).ToList();
                 foreach(Cart cart in carts1)
                 {
-                    cart.UserId = userId;
+                    cart.UseridOrSessionid = userId;
                 }
                 db.SaveChanges();
 
@@ -114,7 +114,7 @@ namespace ShoppingCart.Controllers
 
                 //overwrite existing cart with new cart 
                 //delete old cart
-                List<Cart> carts = db.Carts.Where(x => x.UserId == userId).ToList();
+                List<Cart> carts = db.Carts.Where(x => x.UseridOrSessionid == userId).ToList();
                 foreach (Cart cart in carts)
                 {
                     db.Carts.Remove(cart);
@@ -122,10 +122,10 @@ namespace ShoppingCart.Controllers
                 db.SaveChanges();
 
                 //update new cart with user id
-                List<Cart> carts1 = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("sessionid")).ToList();
+                List<Cart> carts1 = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("sessionid")).ToList();
                 foreach (Cart cart in carts1)
                 {
-                    cart.UserId = userId;
+                    cart.UseridOrSessionid = userId;
                 }
                 db.SaveChanges();
 

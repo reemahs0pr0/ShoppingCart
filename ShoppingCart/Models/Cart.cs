@@ -9,9 +9,8 @@ namespace ShoppingCart.Models
 {
     public class Cart
     {
-        [Required]
-        public string UserId { get; set; }
-        public virtual User User { get; set; }
+        public int Id { get; set; }
+        public string UseridOrSessionid { get; set; }
         [Required]
         public int ProductId { get; set; }
         public virtual Product Product { get; set; }

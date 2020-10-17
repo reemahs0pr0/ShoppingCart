@@ -24,10 +24,10 @@ namespace ShoppingCart.Controllers
             List<Wishlist> wishlist = db.Wishlists.Where(x => x.UserId == HttpContext.Session.GetString("userid")).ToList();
 
             //check if there is any pre-existing item in cart
-            int count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Count();
+            int count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Count();
             if (count != 0)
             {
-                count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
+                count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
             }
 
             //send data to View

@@ -23,7 +23,6 @@ namespace ShoppingCart.Db
         protected override void OnModelCreating(ModelBuilder model)
         {
             model.Entity<Wishlist>().HasKey(x => new { x.UserId, x.ProductId });
-            model.Entity<Cart>().HasKey(x => new { x.UserId, x.ProductId });
             model.Entity<OrderDetail>().HasKey(x => new { x.OrderId, x.ProductId });
         }
 

@@ -1,7 +1,7 @@
 ﻿window.onload = function () {
     //payment confirmation (including after discount, if any)
     if (document.getElementById("total").innerHTML != "") {
-        alert("You have paid $" + document.getElementById("total").innerHTML + "(10% off included) successfully!");
+        alert("You have paid $" + document.getElementById("total").innerHTML + " successfully!");
     }
 
     //logout confirmation

@@ -33,10 +33,10 @@ namespace ShoppingCart.Controllers
             ViewData["topthreeqty"] = topthreeqty;*/
 
             //check if there is any pre-existing item in cart
-            int count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Count();
+            int count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Count();
             if (count != 0)
             {
-                count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
+                count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
             }
 
             //get WishList if logged in
@@ -64,16 +64,19 @@ namespace ShoppingCart.Controllers
         [HttpPost]
         public IActionResult Search(string search)
         {
+            if (search == null)
+                return RedirectToAction("DisplayProduct");
+
             //list of searched products from db based on description
             List<Product> searchedproductlists = db.Products.Where(x => x.Description.Contains(search)).ToList();
 
             if (searchedproductlists.Count == 0)
             {
                 //check if there is any pre-existing item in cart
-                int count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Count();
+                int count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Count();
                 if (count != 0)
                 {
-                    count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
+                    count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
                 }
 
                 //send data to View
@@ -101,10 +104,10 @@ namespace ShoppingCart.Controllers
                 ViewData["topthreeqty"] = topthreeqty;*/
 
                 //check if there is any pre-existing item in cart
-                int count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Count();
+                int count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Count();
                 if (count != 0)
                 {
-                    count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
+                    count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
                 }
 
                 //get WishList if logged in

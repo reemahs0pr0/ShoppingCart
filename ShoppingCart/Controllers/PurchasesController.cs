@@ -88,7 +88,7 @@ namespace ShoppingCart.Controllers
         public IActionResult DisplayNewPurchases()
         {
             //get records from cart
-            List<Cart> cart = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).ToList();
+            List<Cart> cart = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).ToList();
             double total = GetTotalPaid(cart);
 
             //add order based on cart
@@ -97,6 +97,7 @@ namespace ShoppingCart.Controllers
                 UserId = HttpContext.Session.GetString("userid"),
                 PurchaseDate = DateTime.Now.ToString("dd-MM-yyyy")
             });
+            db.SaveChanges();
 
             int orderId = db.Orders.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Max(x => x.Id);
             foreach(Cart item in cart)
