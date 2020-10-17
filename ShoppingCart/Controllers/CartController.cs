@@ -77,7 +77,7 @@ namespace ShoppingCart.Controllers
             }
             else
             {
-                Cart cart = (Cart)db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.ProductId == productId);
+                Cart cart = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.ProductId == productId).Single();
                 cart.Quantity++;
             }
             db.SaveChanges();
@@ -96,7 +96,7 @@ namespace ShoppingCart.Controllers
             int quantity = Convert.ToInt32(update.Quantity);
 
             //send identifier to database to update quantity record
-            Cart cart = (Cart)db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.ProductId == productId);
+            Cart cart = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.ProductId == productId).Single();
             cart.Quantity = quantity;
             db.SaveChanges();
 
@@ -113,7 +113,7 @@ namespace ShoppingCart.Controllers
             int productId = Convert.ToInt32(remove.Id);
 
             //send identifier to database to remove record
-            Cart cart = (Cart)db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.ProductId == productId);
+            Cart cart = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.ProductId == productId).Single();
             db.Carts.Remove(cart);
             db.SaveChanges();
 

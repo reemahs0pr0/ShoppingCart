@@ -71,6 +71,10 @@ namespace ShoppingCart.Controllers
             {
                 //check if there is any pre-existing item in cart
                 int count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Count();
+                if (count != 0)
+                {
+                    count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
+                }
 
                 //send data to View
                 ViewData["count"] = count;
@@ -98,6 +102,10 @@ namespace ShoppingCart.Controllers
 
                 //check if there is any pre-existing item in cart
                 int count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Count();
+                if (count != 0)
+                {
+                    count = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
+                }
 
                 //get WishList if logged in
                 List<Wishlist> wishlist = new List<Wishlist>();

@@ -30,7 +30,7 @@ namespace ShoppingCart.Controllers
         public IActionResult Index(User userModel)
         {
             //check if user exist in db
-            var userId = db.Users.Where(x => x.Username == userModel.Username && x.Password == userModel.Password).Select(x => x.Id).FirstOrDefault();
+            var userId = db.Users.Where(x => x.Username == userModel.Username && x.Password == userModel.Password).Select(x => x.Id).SingleOrDefault();
 
             if (userId == null)
             {
@@ -58,6 +58,7 @@ namespace ShoppingCart.Controllers
                     db.Carts.Remove(cart);
                 }
                 db.SaveChanges();
+
                 //update new cart with user id
                 List<Cart> carts1 = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("sessionid")).ToList();
                 foreach(Cart cart in carts1)
@@ -67,7 +68,7 @@ namespace ShoppingCart.Controllers
                 db.SaveChanges();
 
                 //set 'name' key with name of user
-                var name = db.Users.Where(x => x.Id == userId).Select(x => x.Name).FirstOrDefault();
+                var name = db.Users.Where(x => x.Id == userId).Select(x => x.Name).Single();
                 HttpContext.Session.SetString("name", name);
 
                 return RedirectToAction("DisplayProduct", "Product");
@@ -78,7 +79,7 @@ namespace ShoppingCart.Controllers
 
                 //set session with user id and name
                 HttpContext.Session.SetString("userid", userId);
-                var name = db.Users.Where(x => x.Id == userId).Select(x => x.Name).FirstOrDefault();
+                var name = db.Users.Where(x => x.Id == userId).Select(x => x.Name).Single();
                 HttpContext.Session.SetString("name", name);
 
                 return RedirectToAction("DisplayProduct", "Product");
@@ -96,7 +97,7 @@ namespace ShoppingCart.Controllers
         public IActionResult Index2(User userModel)
         {
             //check if user exist in db
-            var userId = db.Users.Where(x => x.Username == userModel.Username && x.Password == userModel.Password).Select(x => x.Id).FirstOrDefault();
+            var userId = db.Users.Where(x => x.Username == userModel.Username && x.Password == userModel.Password).Select(x => x.Id).SingleOrDefault();
 
             if (userId == null)
             {
@@ -119,6 +120,7 @@ namespace ShoppingCart.Controllers
                     db.Carts.Remove(cart);
                 }
                 db.SaveChanges();
+
                 //update new cart with user id
                 List<Cart> carts1 = db.Carts.Where(x => x.UserId == HttpContext.Session.GetString("sessionid")).ToList();
                 foreach (Cart cart in carts1)
@@ -128,7 +130,7 @@ namespace ShoppingCart.Controllers
                 db.SaveChanges();
 
                 //set 'name' key with name of user
-                var name = db.Users.Where(x => x.Id == userId).Select(x => x.Name).FirstOrDefault();
+                var name = db.Users.Where(x => x.Id == userId).Select(x => x.Name).Single();
                 HttpContext.Session.SetString("name", name);
 
                 return RedirectToAction("DisplayCart", "Cart");

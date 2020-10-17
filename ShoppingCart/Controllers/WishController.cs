@@ -68,7 +68,7 @@ namespace ShoppingCart.Controllers
             int productId = Convert.ToInt32(remove.Id);
 
             //send identifier to database to remove wishlist record
-            Wishlist wish = (Wishlist)db.Wishlists.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.ProductId == productId);
+            Wishlist wish = db.Wishlists.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.ProductId == productId).Single();
             db.Wishlists.Remove(wish);
             db.SaveChanges();
 

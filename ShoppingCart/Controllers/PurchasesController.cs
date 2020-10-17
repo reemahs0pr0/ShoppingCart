@@ -98,7 +98,7 @@ namespace ShoppingCart.Controllers
                 PurchaseDate = DateTime.Now.ToString("dd-MM-yyyy")
             });
 
-            int orderId = db.Orders.Max(x => x.Id);
+            int orderId = db.Orders.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Max(x => x.Id);
             foreach(Cart item in cart)
             {
                 //add order details based on cart

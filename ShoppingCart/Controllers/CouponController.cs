@@ -27,7 +27,7 @@ namespace ShoppingCart.Controllers
             if (couponLeft != 0 && HttpContext.Session.GetString("couponcode") == null)
             {
                 HttpContext.Session.SetString("couponcode", coupon.Id);
-                Coupon usedCoupon = (Coupon)db.Coupons.Where(x => x.Id == coupon.Id);
+                Coupon usedCoupon = db.Coupons.Where(x => x.Id == coupon.Id).Single();
                 db.Coupons.Remove(usedCoupon);
                 db.SaveChanges();
 
