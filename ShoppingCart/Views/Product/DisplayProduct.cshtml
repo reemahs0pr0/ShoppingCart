@@ -3,8 +3,8 @@
     List<Product> productslist = (List<Product>)ViewData["productlists"];
     List<Product> foundproductslist = (List<Product>)ViewData["foundproducts"];
     int count = (int)ViewData["count"];
-    //List<Purchases> topsellingproduct = (List<Purchases>)ViewData["topsellingproduct"];
-    //List<int> topthreeqty = (List<int>)ViewData["topthreeqty"];
+    List<Purchases> topsellingproduct = (List<Purchases>)ViewData["topsellingproduct"];
+    List<int> topthreeqty = (List<int>)ViewData["topthreeqty"];
     List<Wishlist> wishlist = (List<Wishlist>)ViewData["wishlist"];
 
     if (productslist != null)
@@ -173,24 +173,29 @@
                                             Add to Cart
                                         </button>
                                     </div>
-                                    @*<div style="align-content:center">
-                                            @for (int k = 0; k < topsellingproduct.Count; k++)
+                                    <div style="align-content:center">
+                                        @{
+                                            if (topsellingproduct != null)
                                             {
-                                                if (topsellingproduct[k].ProductId == productslist[i + j].Id)
+                                                for (int k = 0; k < topsellingproduct.Count; k++)
                                                 {
-                                                    if (topsellingproduct[k].Quantity == topthreeqty[0])
-                                                    {<span style="color:darkred"><b>BEST SELLING!</b></span> }
+                                                    if (topsellingproduct[k].ProductId == productslist[i + j].Id)
+                                                    {
+                                                        if (topsellingproduct[k].Quantity == topthreeqty[0])
+                                                        {<span style="color:darkred"><b>BEST SELLING!</b></span> }
 
-                                                    else if (topsellingproduct[k].Quantity == topthreeqty[1])
-                                                    { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
+                                                        else if (topsellingproduct[k].Quantity == topthreeqty[1])
+                                                        { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
 
-                                                    else if (topsellingproduct[k].Quantity == topthreeqty[2])
-                                                    { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
-                                                    else
-                                                    { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
+                                                        else if (topsellingproduct[k].Quantity == topthreeqty[2])
+                                                        { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
+                                                        else
+                                                        { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
+                                                    }
                                                 }
                                             }
-                                        </div>*@
+                                        }
+                                    </div>
                                     @if (ViewData["name"] != null) // generates wish icon according to loggedin status
                                     {
                                         if (productslist[i + j].Wish == false)
@@ -240,24 +245,29 @@
                                                 Add to Cart
                                             </button>
                                         </div>
-                                        @*<div style="align-content:center">
-                                                @for (int k = 0; k < topsellingproduct.Count; k++)
+                                        <div style="align-content:center">
+                                            @{
+                                                if (topsellingproduct != null)
                                                 {
-                                                    if (topsellingproduct[k].ProductId == foundproductslist[i + j].Id)
+                                                    for (int k = 0; k < topsellingproduct.Count; k++)
                                                     {
-                                                        if (topsellingproduct[k].Quantity == topthreeqty[0])
-                                                        {<span style="color:darkred"><b>BEST SELLING!</b></span> }
+                                                        if (topsellingproduct[k].ProductId == productslist[i + j].Id)
+                                                        {
+                                                            if (topsellingproduct[k].Quantity == topthreeqty[0])
+                                                            {<span style="color:darkred"><b>BEST SELLING!</b></span> }
 
-                                                        else if (topsellingproduct[k].Quantity == topthreeqty[1])
-                                                        { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
+                                                            else if (topsellingproduct[k].Quantity == topthreeqty[1])
+                                                            { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
 
-                                                        else if (topsellingproduct[k].Quantity == topthreeqty[2])
-                                                        { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
-                                                        else
-                                                        { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
+                                                            else if (topsellingproduct[k].Quantity == topthreeqty[2])
+                                                            { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
+                                                            else
+                                                            { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
+                                                        }
                                                     }
                                                 }
-                                            </div>*@
+                                            }
+                                        </div>
                                         @if (ViewData["name"] != null) // generates wish icon according to loggedin status
                                         {
                                             if (foundproductslist[i + j].Wish == false)

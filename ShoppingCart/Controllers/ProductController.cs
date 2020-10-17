@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Models;
 using ShoppingCart.Db;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 namespace ShoppingCart.Controllers
 {
@@ -23,14 +25,27 @@ namespace ShoppingCart.Controllers
             //create product list to store items details
             List<Product> productlists = db.Products.ToList();
 
-            /*
-            //to get top selling based on past purchases and code implementation
-            List<Purchases> topsellingproduct = ProductData.GetTopSellingProduct();
-            ViewData["topsellingproduct"] = topsellingproduct;
+            int order = db.OrderDetails.Count();
+            if (order != 0)
+            {
+                //to get top selling based on past purchases and code implementation
+                List<Purchases> topsellingproduct = new List<Purchases>();
+                var list = db.OrderDetails.GroupBy(x => x.ProductId).Select(x => new { x.Key, TotalQty = x.Sum(x => x.Quantity) }).OrderByDescending(x => x.TotalQty).ToList();
+                foreach (var product in list)
+                {
+                    topsellingproduct.Add(new Purchases
+                    {
+                        ProductId = product.Key,
+                        Quantity = product.TotalQty
+                    });
+                }
 
-            //to get list of top 3 unique quantity values
-            List<int> topthreeqty = thirdLargest(topsellingproduct);
-            ViewData["topthreeqty"] = topthreeqty;*/
+                ViewData["topsellingproduct"] = topsellingproduct;
+
+                //to get list of top 3 unique quantity values
+                List<int> topthreeqty = thirdLargest(topsellingproduct);
+                ViewData["topthreeqty"] = topthreeqty;
+            }
 
             //check if there is any pre-existing item in cart
             int count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Count();
@@ -92,16 +107,27 @@ namespace ShoppingCart.Controllers
             }
             else
             {
-                /*
-                //to get top selling based on past purchases and code implementation
-                List<Purchases> topsellingproduct = ProductData.GetTopSellingProduct();
+                int order = db.OrderDetails.Count();
+                if (order != 0)
+                {
+                    //to get top selling based on past purchases and code implementation
+                    List<Purchases> topsellingproduct = new List<Purchases>();
+                    var list = db.OrderDetails.GroupBy(x => x.ProductId).Select(x => new { x.Key, TotalQty = x.Sum(x => x.Quantity) }).OrderByDescending(x => x.TotalQty).ToList();
+                    foreach (var product in list)
+                    {
+                        topsellingproduct.Add(new Purchases
+                        {
+                            ProductId = product.Key,
+                            Quantity = product.TotalQty
+                        });
+                    }
 
-                ViewData["topsellingproduct"] = topsellingproduct;
+                    ViewData["topsellingproduct"] = topsellingproduct;
 
-                //to get list of top 3 unique quantity values
-                List<int> topthreeqty = thirdLargest(topsellingproduct);
-
-                ViewData["topthreeqty"] = topthreeqty;*/
+                    //to get list of top 3 unique quantity values
+                    List<int> topthreeqty = thirdLargest(topsellingproduct);
+                    ViewData["topthreeqty"] = topthreeqty;
+                }
 
                 //check if there is any pre-existing item in cart
                 int count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Count();
@@ -133,7 +159,7 @@ namespace ShoppingCart.Controllers
             return View("DisplayProduct");
         }
 
-        /*static List<int> thirdLargest(List<Purchases> topsellingproduct)
+        static List<int> thirdLargest(List<Purchases> topsellingproduct)
         {
             List<int> topthreehighestqty = new List<int>();
 
@@ -169,6 +195,6 @@ namespace ShoppingCart.Controllers
             topthreehighestqty.Add(third);
 
             return topthreehighestqty;
-        }*/
+        }
     }
 }
