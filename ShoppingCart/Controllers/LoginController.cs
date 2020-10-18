@@ -136,5 +136,107 @@ namespace ShoppingCart.Controllers
                 return RedirectToAction("DisplayCart", "Cart");
             }
         }
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(User user)
+        {
+            int usernameInDb = db.Users.Where(x => x.Username == user.Username).Count();
+            string lastUserId = db.Users.OrderByDescending(x => x.Id).Select(x => x.Id).First();
+            user.Id = Convert.ToString(Convert.ToInt32(lastUserId) + 1);
+
+            if (usernameInDb == 0)
+            {
+                db.Users.Add(new User
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = user.Password,
+                    Name = user.Name
+                });
+                db.SaveChanges();
+
+                if (HttpContext.Session.GetString("userid") != null)
+                {
+                    //if user has added to cart before registering
+
+                    //store GUID as session id
+                    HttpContext.Session.SetString("sessionid", HttpContext.Session.GetString("userid"));
+
+                    //update new cart with user id
+                    List<Cart> carts1 = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("sessionid")).ToList();
+                    foreach (Cart cart in carts1)
+                    {
+                        cart.UseridOrSessionid = user.Id;
+                    }
+                    db.SaveChanges();
+                }
+
+                HttpContext.Session.SetString("userid", user.Id);
+                HttpContext.Session.SetString("name", user.Name);
+
+                return RedirectToAction("DisplayProduct", "Product");
+            }
+            else
+            {
+                ViewData["errmsg"] = "Username has been taken.";
+
+                return View();
+            }
+        }
+        public IActionResult Register2()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register2(User user)
+        {
+            int usernameInDb = db.Users.Where(x => x.Username == user.Username).Count();
+            string lastUserId = db.Users.OrderByDescending(x => x.Id).Select(x => x.Id).First();
+            user.Id = Convert.ToString(Convert.ToInt32(lastUserId) + 1);
+
+            if (usernameInDb == 0)
+            {
+                db.Users.Add(new User
+                {
+                    Id = user.Id,
+                    Username = user.Username,
+                    Password = user.Password,
+                    Name = user.Name
+                });
+                db.SaveChanges();
+
+                if (HttpContext.Session.GetString("userid") != null)
+                {
+                    //if user has added to cart before registering
+
+                    //store GUID as session id
+                    HttpContext.Session.SetString("sessionid", HttpContext.Session.GetString("userid"));
+
+                    //update new cart with user id
+                    List<Cart> carts1 = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("sessionid")).ToList();
+                    foreach (Cart cart in carts1)
+                    {
+                        cart.UseridOrSessionid = user.Id;
+                    }
+                    db.SaveChanges();
+                }
+
+                HttpContext.Session.SetString("userid", Convert.ToString(Convert.ToInt32(lastUserId) + 1));
+                HttpContext.Session.SetString("name", user.Name);
+
+                return RedirectToAction("DisplayCart", "Cart");
+            }
+            else
+            {
+                ViewData["errmsg"] = "Username has been taken.";
+
+                return View();
+            }
+        }
     }
 }

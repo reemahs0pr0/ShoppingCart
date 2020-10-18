@@ -135,3 +135,5 @@ C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.
 C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\bin\Debug\netcoreapp3.1\EntityFramework.SqlServer.dll
 C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\bin\Debug\netcoreapp3.1\EntityFramework.dll
 C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\bin\Debug\netcoreapp3.1\System.CodeDom.dll
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\Razor\Views\Login\Register.cshtml.g.cs
+C:\Users\shame\Documents\GitHub\ShoppingCart\ShoppingCart\obj\Debug\netcoreapp3.1\Razor\Views\Login\Register2.cshtml.g.cs

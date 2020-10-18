@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+@model ShoppingCart.Models.User
+
+@section Scripts
+{
+    <script src="~/js/login/register.js"></script>
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Register</title>
+    <style>
+        #register-div {
+            position: absolute;
+            left: 30%;
+            top: 30%;
+            border: 1px solid #000;
+            padding: 20px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="register-div">
+        @using (Html.BeginForm("Register", "Login", FormMethod.Post, new { id = "form" }))
+        {
+            <table>
+                <tr>
+                    <td>
+                        <b>Fill up the following details.</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Username)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Username, new { id = "username" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Password)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Password, new { id = "password", type = "password" })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Confirm Password: 
+                    </td>
+                    <td>
+                        <input type="password" id="confirmpassword" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.Name)
+                    </td>
+                    <td>
+                        @Html.TextBoxFor(model => model.Name, new { id = "name" })
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td align="right">
+                        <input type="submit" value="register" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center" style="font-weight:bold;color:red">
+                        @ViewData["errmsg"]
+                    </td>
+                </tr>
+            </table>
+        }
+
+    </div>
+</body>
+</html>

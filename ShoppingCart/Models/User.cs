@@ -19,6 +19,7 @@ namespace ShoppingCart.Models
         [DataType(DataType.Password)]
         [Required]
         public string Password { get; set; }
+        [DisplayName("Name:")]
         [Required]
         public string Name { get; set; }
     }
