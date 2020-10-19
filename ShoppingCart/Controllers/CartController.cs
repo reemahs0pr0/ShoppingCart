@@ -6,23 +6,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Db;
 using ShoppingCart.Models;
+using ShoppingCart.DAL;
 
 namespace ShoppingCart.Controllers
 {
     public class CartController : Controller
     {
         private readonly DbGallery db;
+        private readonly CartsDAL cartsDAL;
 
         public CartController(DbGallery db)
         {
             this.db = db;
+            cartsDAL = new CartsDAL(db);
         }
 
         public IActionResult DisplayCart()
         {
-            //store in-cart items for the user in a list
-            List<Cart> cart = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).ToList();
-            
+            //get in-cart items for the user in a list
+            List<Cart> cart = cartsDAL.GetCart(HttpContext.Session.GetString("userid"));
+
             //create variable to store total price
             double total = 0;
 
@@ -65,22 +68,7 @@ namespace ShoppingCart.Controllers
             int productId = Convert.ToInt32(add.Id);
 
             //send identifier to database to update quantity record
-            int checkItemInCart = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid") && x.ProductId == productId).Count();
-            if (checkItemInCart == 0)
-            {
-                db.Carts.Add(new Cart
-                {
-                    UseridOrSessionid = HttpContext.Session.GetString("userid"),
-                    ProductId = productId,
-                    Quantity = 1
-                });
-            }
-            else
-            {
-                Cart cart = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid") && x.ProductId == productId).Single();
-                cart.Quantity++;
-            }
-            db.SaveChanges();
+            cartsDAL.AddItem(HttpContext.Session.GetString("userid"), productId);
 
             return Json(new
             {
@@ -96,9 +84,7 @@ namespace ShoppingCart.Controllers
             int quantity = Convert.ToInt32(update.Quantity);
 
             //send identifier to database to update quantity record
-            Cart cart = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid") && x.ProductId == productId).Single();
-            cart.Quantity = quantity;
-            db.SaveChanges();
+            cartsDAL.UpdateQuantity(HttpContext.Session.GetString("userid"), productId, quantity);
 
             return Json(new
             {
@@ -113,9 +99,7 @@ namespace ShoppingCart.Controllers
             int productId = Convert.ToInt32(remove.Id);
 
             //send identifier to database to remove record
-            Cart cart = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid") && x.ProductId == productId).Single();
-            db.Carts.Remove(cart);
-            db.SaveChanges();
+            cartsDAL.RemoveItem(HttpContext.Session.GetString("userid"), productId);
 
             return Json(new
             {

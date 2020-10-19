@@ -7,16 +7,25 @@ using ShoppingCart.Models;
 using Microsoft.AspNetCore.Http;
 using ShoppingCart.Db;
 using System.Security.Cryptography.X509Certificates;
+using ShoppingCart.DAL;
 
 namespace ShoppingCart.Controllers
 {
     public class PurchasesController : Controller
     {
         private readonly DbGallery db;
+        private readonly OrdersDAL ordersDAL;
+        private readonly OrderDetailsDAL orderdetailsDAL;
+        private readonly ActivationCodesDAL activationcodesDAL;
+        private readonly CartsDAL cartsDAL;
 
         public PurchasesController(DbGallery db)
         {
             this.db = db;
+            ordersDAL = new OrdersDAL(db);
+            orderdetailsDAL = new OrderDetailsDAL(db);
+            activationcodesDAL = new ActivationCodesDAL(db);
+            cartsDAL = new CartsDAL(db);
         }
 
         //when user click 'My Purchases'
@@ -36,14 +45,14 @@ namespace ShoppingCart.Controllers
         public List<Purchases> FinalList()
         {
             //get list of all purchases and activation codes from db
-            List<Order> orders = db.Orders.Where(x => x.UserId == HttpContext.Session.GetString("userid")).OrderByDescending(x => x.Id).ToList();
+            List<Order> orders = ordersDAL.GetOrders(HttpContext.Session.GetString("userid"));
             List<OrderDetail> orderDetails;
             List<ActivationCode> activationCodes;
             List<Purchases> purchases = new List<Purchases>();
             List<ActivationCode> activationCodesOverall = new List<ActivationCode>();
             foreach(Order order in orders)
             {
-                orderDetails = db.OrderDetails.Where(x => x.OrderId == order.Id).ToList();
+                orderDetails = orderdetailsDAL.GetOrderDetails(order.Id);
                 foreach (OrderDetail od in orderDetails)
                 {
                     purchases.Add(new Purchases
@@ -58,7 +67,7 @@ namespace ShoppingCart.Controllers
                         Link = od.Product.Link
                     });
                 }
-                activationCodes = db.ActivationCodes.Where(x => x.OrderId == order.Id).ToList();
+                activationCodes = activationcodesDAL.GetActivationCodes(order.Id);
                 foreach (ActivationCode code in activationCodes)
                 {
                     activationCodesOverall.Add(new ActivationCode
@@ -88,43 +97,27 @@ namespace ShoppingCart.Controllers
         public IActionResult DisplayNewPurchases()
         {
             //get records from cart
-            List<Cart> cart = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).ToList();
+            List<Cart> cart = cartsDAL.GetCart(HttpContext.Session.GetString("userid"));
             double total = GetTotalPaid(cart);
 
             //add order based on cart
-            db.Orders.Add(new Order
-            {
-                UserId = HttpContext.Session.GetString("userid"),
-                PurchaseDate = DateTime.Now.ToString("dd-MM-yyyy")
-            });
-            db.SaveChanges();
+            ordersDAL.AddOrder(HttpContext.Session.GetString("userid"));
 
-            int orderId = db.Orders.Where(x => x.UserId == HttpContext.Session.GetString("userid")).Max(x => x.Id);
+            int orderId = ordersDAL.GetOrderId(HttpContext.Session.GetString("userid"));
             foreach(Cart item in cart)
             {
                 //add order details based on cart
-                db.OrderDetails.Add(new OrderDetail
-                {
-                    OrderId = orderId,
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity
-                });
+                orderdetailsDAL.AddOrderDetails(orderId, item);
 
                 for (int i = 0; i < item.Quantity; i++)
                 {
                     //create activation code for every purchased item and store in db
-                    db.ActivationCodes.Add(new ActivationCode
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        OrderId = orderId,
-                        ProductId = item.ProductId
-                    });
+                    activationcodesDAL.AddActivationCode(orderId, item);
                 }
 
                 //erase all records from cart
-                db.Carts.Remove(item);
+                cartsDAL.RemoveItem(item);
             }
-            db.SaveChanges();
 
             TempData["total"] = total.ToString("#0.00");
 

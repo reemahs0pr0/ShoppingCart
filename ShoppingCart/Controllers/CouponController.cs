@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShoppingCart.DAL;
 using ShoppingCart.Db;
 using ShoppingCart.Models;
 
@@ -12,24 +13,24 @@ namespace ShoppingCart.Controllers
     public class CouponController : Controller
     {
         private readonly DbGallery db;
+        private readonly CouponsDAL couponsDAL;
 
         public CouponController(DbGallery db)
         {
             this.db = db;
+            couponsDAL = new CouponsDAL(db);
         }
 
         [HttpPost]
         public IActionResult ValidateCoupon([FromBody] Coupon coupon)
         {
             // invoke action to validate coupon
-            int couponLeft = db.Coupons.Where(x => x.Id == coupon.Id).Count();
+            int couponLeft = couponsDAL.ValidateCoupon(coupon.Id);
 
             if (couponLeft != 0 && HttpContext.Session.GetString("couponcode") == null)
             {
                 HttpContext.Session.SetString("couponcode", coupon.Id);
-                Coupon usedCoupon = db.Coupons.Where(x => x.Id == coupon.Id).Single();
-                db.Coupons.Remove(usedCoupon);
-                db.SaveChanges();
+                couponsDAL.UseCoupon(coupon.Id);
 
                 // if user entered coupon is validated
                 return Json(new

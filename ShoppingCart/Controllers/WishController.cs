@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShoppingCart.DAL;
 using ShoppingCart.Db;
 using ShoppingCart.Models;
 
@@ -12,23 +13,23 @@ namespace ShoppingCart.Controllers
     public class WishController : Controller
     {
         private readonly DbGallery db;
+        private readonly WishlistsDAL wishlistsDAL;
+        private readonly CartsDAL cartsDAL;
 
         public WishController(DbGallery db)
         {
             this.db = db;
+            wishlistsDAL = new WishlistsDAL(db);
+            cartsDAL = new CartsDAL(db);
         }
 
         public IActionResult DisplayWish()
         {
             //get WishList
-            List<Wishlist> wishlist = db.Wishlists.Where(x => x.UserId == HttpContext.Session.GetString("userid")).ToList();
+            List<Wishlist> wishlist = wishlistsDAL.GetWishList(HttpContext.Session.GetString("userid"));
 
             //check if there is any pre-existing item in cart
-            int count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Count();
-            if (count != 0)
-            {
-                count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
-            }
+            int count = cartsDAL.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
             //send data to View
             ViewData["count"] = count;
@@ -48,12 +49,7 @@ namespace ShoppingCart.Controllers
             int productId = Convert.ToInt32(add.Id);
 
             //send identifier to database to add wishlist record
-            db.Wishlists.Add(new Wishlist
-            {
-                UserId = HttpContext.Session.GetString("userid"),
-                ProductId = productId
-            });
-            db.SaveChanges();
+            wishlistsDAL.AddItem(HttpContext.Session.GetString("userid"), productId);
 
             return Json(new
             {
@@ -68,9 +64,7 @@ namespace ShoppingCart.Controllers
             int productId = Convert.ToInt32(remove.Id);
 
             //send identifier to database to remove wishlist record
-            Wishlist wish = db.Wishlists.Where(x => x.UserId == HttpContext.Session.GetString("userid") && x.ProductId == productId).Single();
-            db.Wishlists.Remove(wish);
-            db.SaveChanges();
+            wishlistsDAL.RemoveItem(HttpContext.Session.GetString("userid"), productId);
 
             return Json(new
             {

@@ -8,29 +8,36 @@ using ShoppingCart.Models;
 using ShoppingCart.Db;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using ShoppingCart.DAL;
 
 namespace ShoppingCart.Controllers
 {
     public class ProductController : Controller
     {
         private readonly DbGallery db;
+        private readonly ProductsDAL productsDAL;
+        private readonly CartsDAL cartsDAL;
+        private readonly WishlistsDAL wishlistsDAL;
 
         public ProductController(DbGallery db)
         {
             this.db = db;
+            productsDAL = new ProductsDAL(db);
+            cartsDAL = new CartsDAL(db);
+            wishlistsDAL = new WishlistsDAL(db);
         }
 
         public IActionResult DisplayProduct()
         {
             //create product list to store items details
-            List<Product> productlists = db.Products.ToList();
+            List<Product> productlists = productsDAL.GetAllProducts();
 
-            int order = db.OrderDetails.Count();
+            int order = productsDAL.GetNoOfOrders();
             if (order != 0)
             {
                 //to get top selling based on past purchases and code implementation
                 List<Purchases> topsellingproduct = new List<Purchases>();
-                var list = db.OrderDetails.GroupBy(x => x.ProductId).Select(x => new { x.Key, TotalQty = x.Sum(x => x.Quantity) }).OrderByDescending(x => x.TotalQty).ToList();
+                var list = productsDAL.GetTopSellingProduct();
                 foreach (var product in list)
                 {
                     topsellingproduct.Add(new Purchases
@@ -48,17 +55,13 @@ namespace ShoppingCart.Controllers
             }
 
             //check if there is any pre-existing item in cart
-            int count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Count();
-            if (count != 0)
-            {
-                count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
-            }
+            int count = cartsDAL.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
             //get WishList if logged in
             List<Wishlist> wishlist = new List<Wishlist>();
             if (HttpContext.Session.GetString("name") != null)
             {
-                wishlist = db.Wishlists.Where(x => x.UserId == HttpContext.Session.GetString("userid")).ToList();
+                wishlist = wishlistsDAL.GetWishList(HttpContext.Session.GetString("userid"));
             }
 
             //send data to View
@@ -83,16 +86,12 @@ namespace ShoppingCart.Controllers
                 return RedirectToAction("DisplayProduct");
 
             //list of searched products from db based on description
-            List<Product> searchedproductlists = db.Products.Where(x => x.Description.Contains(search)).ToList();
+            List<Product> searchedproductlists = productsDAL.GetProductSearch(search);
 
             if (searchedproductlists.Count == 0)
             {
                 //check if there is any pre-existing item in cart
-                int count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Count();
-                if (count != 0)
-                {
-                    count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
-                }
+                int count = cartsDAL.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
                 //send data to View
                 ViewData["count"] = count;
@@ -107,12 +106,12 @@ namespace ShoppingCart.Controllers
             }
             else
             {
-                int order = db.OrderDetails.Count();
+                int order = productsDAL.GetNoOfOrders();
                 if (order != 0)
                 {
                     //to get top selling based on past purchases and code implementation
                     List<Purchases> topsellingproduct = new List<Purchases>();
-                    var list = db.OrderDetails.GroupBy(x => x.ProductId).Select(x => new { x.Key, TotalQty = x.Sum(x => x.Quantity) }).OrderByDescending(x => x.TotalQty).ToList();
+                    var list = productsDAL.GetTopSellingProduct();
                     foreach (var product in list)
                     {
                         topsellingproduct.Add(new Purchases
@@ -130,17 +129,13 @@ namespace ShoppingCart.Controllers
                 }
 
                 //check if there is any pre-existing item in cart
-                int count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Count();
-                if (count != 0)
-                {
-                    count = db.Carts.Where(x => x.UseridOrSessionid == HttpContext.Session.GetString("userid")).Sum(x => x.Quantity);
-                }
+                int count = cartsDAL.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
                 //get WishList if logged in
                 List<Wishlist> wishlist = new List<Wishlist>();
                 if (HttpContext.Session.GetString("name") != null)
                 {
-                    wishlist = db.Wishlists.Where(x => x.UserId == HttpContext.Session.GetString("userid")).ToList();
+                    wishlist = wishlistsDAL.GetWishList(HttpContext.Session.GetString("userid"));
                 }
 
                 //send data to View
