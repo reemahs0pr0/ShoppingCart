@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.DAL;
 using ShoppingCart.Db;
 using ShoppingCart.Models;
+using ShoppingCart.ViewModels;
 
 namespace ShoppingCart.Controllers
 {
@@ -25,6 +26,8 @@ namespace ShoppingCart.Controllers
 
         public IActionResult DisplayWish()
         {
+            WishViewModel wishViewModel = new WishViewModel();
+
             //get WishList
             List<Wishlist> wishlist = wishlistsDAL.GetWishList(HttpContext.Session.GetString("userid"));
 
@@ -32,14 +35,14 @@ namespace ShoppingCart.Controllers
             int count = cartsDAL.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
             //send data to View
-            ViewData["count"] = count;
-            ViewData["wishlist"] = wishlist;
+            wishViewModel.Count = count;
+            wishViewModel.WishList = wishlist;
             ViewData["images_prefix"] = "/img/";
 
             // to highlight "Shopping" as the selected menu-item
             ViewData["Is_Shopping"] = "menu_hilite";
 
-            return View();
+            return View(wishViewModel);
         }
 
         [HttpPost]

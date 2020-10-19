@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Models;
 using ShoppingCart.Db;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using ShoppingCart.DAL;
+using ShoppingCart.ViewModels;
 
 namespace ShoppingCart.Controllers
 {
@@ -29,8 +29,11 @@ namespace ShoppingCart.Controllers
 
         public IActionResult DisplayProduct()
         {
+            ProductViewModel productViewModel = new ProductViewModel();
+
             //create product list to store items details
             List<Product> productlists = productsDAL.GetAllProducts();
+            productViewModel.Products = productlists;
 
             int order = productsDAL.GetNoOfOrders();
             if (order != 0)
@@ -47,11 +50,11 @@ namespace ShoppingCart.Controllers
                     });
                 }
 
-                ViewData["topsellingproduct"] = topsellingproduct;
+                productViewModel.TopProducts = topsellingproduct;
 
                 //to get list of top 3 unique quantity values
                 List<int> topthreeqty = thirdLargest(topsellingproduct);
-                ViewData["topthreeqty"] = topthreeqty;
+                productViewModel.Top3Qty = topthreeqty;
             }
 
             //check if there is any pre-existing item in cart
@@ -65,18 +68,17 @@ namespace ShoppingCart.Controllers
             }
 
             //send data to View
-            ViewData["wishlist"] = wishlist;
-            ViewData["count"] = count;
-            ViewData["productlists"] = productlists;
+            productViewModel.Wishlists = wishlist;
+            productViewModel.Count = count;
             ViewBag.a = 1; //indicator to display all products
 
             //pass name, if any, to HTML
-            ViewData["name"] = HttpContext.Session.GetString("name");
+            productViewModel.Name = HttpContext.Session.GetString("name");
 
             // to highlight "Shopping" as the selected menu-item
             ViewData["Is_Shopping"] = "menu_hilite";
 
-            return View();
+            return View(productViewModel);
         }
 
         [HttpPost]
@@ -84,6 +86,8 @@ namespace ShoppingCart.Controllers
         {
             if (search == null)
                 return RedirectToAction("DisplayProduct");
+
+            ProductViewModel productViewModel = new ProductViewModel();
 
             //list of searched products from db based on description
             List<Product> searchedproductlists = productsDAL.GetProductSearch(search);
@@ -94,12 +98,12 @@ namespace ShoppingCart.Controllers
                 int count = cartsDAL.CheckLastInCart(HttpContext.Session.GetString("userid"));
 
                 //send data to View
-                ViewData["count"] = count;
+                productViewModel.Count = count;
                 ViewData["search"] = search;
                 ViewBag.a = 3; //indicator if search product not found
 
                 //pass username, if any, to HTML
-                ViewData["name"] = HttpContext.Session.GetString("name");
+                productViewModel.Name = HttpContext.Session.GetString("name");
 
                 // to highlight "Shopping" as the selected menu-item
                 ViewData["Is_Shopping"] = "menu_hilite";
@@ -121,11 +125,11 @@ namespace ShoppingCart.Controllers
                         });
                     }
 
-                    ViewData["topsellingproduct"] = topsellingproduct;
+                    productViewModel.TopProducts = topsellingproduct;
 
                     //to get list of top 3 unique quantity values
                     List<int> topthreeqty = thirdLargest(topsellingproduct);
-                    ViewData["topthreeqty"] = topthreeqty;
+                    productViewModel.Top3Qty = topthreeqty;
                 }
 
                 //check if there is any pre-existing item in cart
@@ -139,19 +143,19 @@ namespace ShoppingCart.Controllers
                 }
 
                 //send data to View
-                ViewData["wishlist"] = wishlist;
-                ViewData["count"] = count;
+                productViewModel.Wishlists = wishlist;
+                productViewModel.Count = count;
                 ViewData["search"] = search;
-                ViewData["foundproducts"] = searchedproductlists;
+                productViewModel.SearchedProducts = searchedproductlists;
                 ViewBag.a = 2; //indicator to display searched products
 
                 //pass name, if any, to HTML
-                ViewData["name"] = HttpContext.Session.GetString("name");
+                productViewModel.Name = HttpContext.Session.GetString("name");
 
                 // to highlight "Shopping" as the selected menu-item
                 ViewData["Is_Shopping"] = "menu_hilite";
             }
-            return View("DisplayProduct");
+            return View("DisplayProduct", productViewModel);
         }
 
         static List<int> thirdLargest(List<Purchases> topsellingproduct)

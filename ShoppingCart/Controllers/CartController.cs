@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Db;
 using ShoppingCart.Models;
 using ShoppingCart.DAL;
+using ShoppingCart.ViewModels;
 
 namespace ShoppingCart.Controllers
 {
@@ -23,6 +24,8 @@ namespace ShoppingCart.Controllers
 
         public IActionResult DisplayCart()
         {
+            CartViewModel cartViewModel = new CartViewModel();
+
             //get in-cart items for the user in a list
             List<Cart> cart = cartsDAL.GetCart(HttpContext.Session.GetString("userid"));
 
@@ -37,22 +40,22 @@ namespace ShoppingCart.Controllers
 
             //to display 'total' in html
             if (total == 0)
-                ViewData["total"] = "0.00";
+                cartViewModel.Total = "0.00";
             else
-                ViewData["total"] = total.ToString("#0.00");
+                cartViewModel.Total = total.ToString("#0.00");
 
             //send other data to View
-            ViewData["cart"] = cart;
+            cartViewModel.Cart = cart;
             ViewData["images_prefix"] = "/img/";
 
             // to highlight "Shopping" as the selected menu-item
             ViewData["Is_Shopping"] = "menu_hilite";
 
             // inform HTML if user is guest
-            ViewData["loggedin"] = Int32.TryParse(HttpContext.Session.GetString("userid"), 
+            cartViewModel.LoggedIn = Int32.TryParse(HttpContext.Session.GetString("userid"), 
                 out int userId);
 
-            return View();
+            return View(cartViewModel);
         }
 
         [HttpPost]

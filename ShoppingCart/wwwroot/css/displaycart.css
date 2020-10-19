@@ -1,0 +1,55 @@
+﻿#empty {
+    text-align: center;
+    font-weight: bold;
+    font-size: 36px;
+}
+
+.total {
+    font-size: 20px;
+    position: fixed;
+    top: 75px;
+    right: 50px;
+}
+
+.product_container img {
+    width: 200px;
+    height: 200px;
+    border: solid 1px black;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+table {
+    margin: auto;
+}
+
+.remove_icon {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    margin-left: 200px;
+}
+
+.product_container {
+    border: solid black 2px;
+    display: block;
+    margin: auto;
+    width: 300px;
+    padding: 10px;
+}
+
+.quantity {
+    width: 40px;
+}
+
+td {
+    padding: 5px;
+}
+
+.details {
+    display: block;
+    margin-left: 30px;
+    padding: 10px;
+}

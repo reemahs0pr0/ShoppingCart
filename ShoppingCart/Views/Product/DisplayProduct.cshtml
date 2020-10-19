@@ -1,17 +1,13 @@
-﻿@{
-    ViewData["Title"] = "Gallery";
-    List<Product> productslist = (List<Product>)ViewData["productlists"];
-    List<Product> foundproductslist = (List<Product>)ViewData["foundproducts"];
-    int count = (int)ViewData["count"];
-    List<Purchases> topsellingproduct = (List<Purchases>)ViewData["topsellingproduct"];
-    List<int> topthreeqty = (List<int>)ViewData["topthreeqty"];
-    List<Wishlist> wishlist = (List<Wishlist>)ViewData["wishlist"];
+﻿@model ShoppingCart.ViewModels.ProductViewModel
 
-    if (productslist != null)
+@{
+    ViewData["Title"] = "Gallery";
+
+    if (Model.Products != null)
     {
-        foreach (var product in productslist)
+        foreach (var product in Model.Products)
         {
-            foreach (var wish in wishlist)
+            foreach (var wish in Model.Wishlists)
             {
                 if (product.Id == wish.ProductId)
                 {
@@ -20,11 +16,11 @@
             }
         }
     }
-    else if (foundproductslist != null)
+    else if (Model.SearchedProducts != null)
     {
-        foreach (var product in foundproductslist)
+        foreach (var product in Model.SearchedProducts)
         {
-            foreach (var wish in wishlist)
+            foreach (var wish in Model.Wishlists)
             {
                 if (product.Id == wish.ProductId)
                 {
@@ -41,95 +37,16 @@
 }
 
 <head>
-    <title>cart</title>
-    <style>
-        .button2 {
-            background-color: white;
-            border: solid 1px black;
-            color: black;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .button3 {
-            background-color: cornflowerblue;
-            border: none;
-            color: white;
-            padding: 3px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            -webkit-transition-duration: 0.4s; /* Safari */
-            transition-duration: 0.4s;
-            box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
-        }
-
-        .buttonforcart {
-            display: inline-block;
-            padding: 10px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            outline: none;
-            color: black;
-            background-color: lavender;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 9px #999;
-            position: fixed;
-            top: 100px;
-            right: 50px;
-        }
-
-        .buttonforcart:hover {
-            background-color: #57509f
-        }
-
-        .buttonforcart:active {
-            background-color: #57509f;
-            box-shadow: 0 5px #666;
-            transform: translateY(4px);
-        }
-
-        table {
-            margin: auto;
-            width: 99%;
-        }
-
-        #search {
-            display: inline-block
-        }
-
-        td {
-            padding: 10px;
-            width: 33%;
-        }
-
-        #searchid {
-            width: 250px;
-        }
-
-        .wish_icon {
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/displayproduct.css" />
 </head>
 <body>
     <header>
         <h1>Software Gallery</h1>
     </header>
     <div id="subheader">
-        @if (ViewData["name"] != null)
+        @if (Model.Name != null)
         {
-            @:Hello, <b>@ViewData["name"]</b>
+            @:Hello, <b>@Model.Name</b>
             <a href="/Purchases/DisplayPurchases" id="checkout"><u>My Purchases</u></a> @:| <a href="/Wish/DisplayWish"><u>My Wishlist</u></a> | <a href="/Logout/Index" id="logout"><u>Logout</u></a>
         }
         else
@@ -139,7 +56,7 @@
     </div>
     <div id="body">
         <form action="/Cart/DisplayCart">
-            <input type="submit" value="Cart: @count" class="buttonforcart" id="clickme" />
+            <input type="submit" value="Cart: @Model.Count" class="buttonforcart" id="clickme" />
         </form>
         <br />
         <div id="search">
@@ -157,37 +74,37 @@
         if (ViewBag.a == 1)
         {
             <table>
-                @for (int i = 0; i < productslist.Count; i += 3)
+                @for (int i = 0; i < Model.Products.Count; i += 3)
                 {
                     int j;
                     <tr>
-                        @for (j = 0; j < 3 && i + j < productslist.Count; j++)
+                        @for (j = 0; j < 3 && i + j < Model.Products.Count; j++)
                         {
-                            string url = "/img/" + productslist[i + j].Image;
+                            string url = "/img/" + Model.Products[i + j].Image;
                             <td>
                                 <div>
                                     <img style="align-content:center" src=@url width="150" height="150" />
                                     <br /><br />
                                     <div style="align-content:center">
-                                        <button class="button3 add-to-cart" id="@productslist[i + j].Id">
+                                        <button class="button3 add-to-cart" id="@Model.Products[i + j].Id">
                                             Add to Cart
                                         </button>
                                     </div>
                                     <div style="align-content:center">
                                         @{
-                                            if (topsellingproduct != null)
+                                            if (Model.TopProducts != null)
                                             {
-                                                for (int k = 0; k < topsellingproduct.Count; k++)
+                                                for (int k = 0; k < Model.TopProducts.Count; k++)
                                                 {
-                                                    if (topsellingproduct[k].ProductId == productslist[i + j].Id)
+                                                    if (Model.TopProducts[k].ProductId == Model.Products[i + j].Id)
                                                     {
-                                                        if (topsellingproduct[k].Quantity == topthreeqty[0])
+                                                        if (Model.TopProducts[k].Quantity == Model.Top3Qty[0])
                                                         {<span style="color:darkred"><b>BEST SELLING!</b></span> }
 
-                                                        else if (topsellingproduct[k].Quantity == topthreeqty[1])
+                                                        else if (Model.TopProducts[k].Quantity == Model.Top3Qty[1])
                                                         { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
 
-                                                        else if (topsellingproduct[k].Quantity == topthreeqty[2])
+                                                        else if (Model.TopProducts[k].Quantity == Model.Top3Qty[2])
                                                         { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
                                                         else
                                                         { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
@@ -196,23 +113,23 @@
                                             }
                                         }
                                     </div>
-                                    @if (ViewData["name"] != null) // generates wish icon according to loggedin status
+                                    @if (Model.Name != null) // generates wish icon according to loggedin status
                                     {
-                                        if (productslist[i + j].Wish == false)
+                                        if (Model.Products[i + j].Wish == false)
                                         {
-                                            <img src="~/img/hearts_black.png" class="wish_icon" wish_id="@productslist[i + j].Id" />
+                                            <img src="~/img/hearts_black.png" class="wish_icon" wish_id="@Model.Products[i + j].Id" />
                                         }
                                         else
                                         {
-                                            <img src="~/img/hearts_color.png" class="wish_icon" wish_id="@productslist[i + j].Id" />
+                                            <img src="~/img/hearts_color.png" class="wish_icon" wish_id="@Model.Products[i + j].Id" />
                                         }
                                     }
                                 </div>
                                 <br />
                                 <div>
-                                    <p style="text-align:justify"><b>@productslist[i + j].Title</b></p>
-                                    <p style="text-align:justify">@productslist[i + j].Description</p>
-                                    <p style="text-align:justify"><em>S$@productslist[i + j].Price</em></p>
+                                    <p style="text-align:justify"><b>@Model.Products[i + j].Title</b></p>
+                                    <p style="text-align:justify">@Model.Products[i + j].Description</p>
+                                    <p style="text-align:justify"><em>S$@Model.Products[i + j].Price</em></p>
                                 </div>
                             </td>
                         }
@@ -226,40 +143,40 @@
         }
         else if (ViewBag.a == 2)
         {
-            if (foundproductslist != null)
+            if (Model.SearchedProducts != null)
             {
                 <table>
-                    @for (int i = 0; i < foundproductslist.Count; i += 3)
+                    @for (int i = 0; i < Model.SearchedProducts.Count; i += 3)
                     {
                         int j;
                         <tr>
-                            @for (j = 0; j < 3 && i + j < foundproductslist.Count; j++)
+                            @for (j = 0; j < 3 && i + j < Model.SearchedProducts.Count; j++)
                             {
-                                string url = "/img/" + foundproductslist[i + j].Image;
+                                string url = "/img/" + Model.SearchedProducts[i + j].Image;
                                 <td>
                                     <div>
                                         <img style="align-content:center" src=@url width="150" height="150" />
                                         <br /><br />
                                         <div style="align-content:center">
-                                            <button class="button3 add-to-cart" id="@foundproductslist[i + j].Id">
+                                            <button class="button3 add-to-cart" id="@Model.SearchedProducts[i + j].Id">
                                                 Add to Cart
                                             </button>
                                         </div>
                                         <div style="align-content:center">
                                             @{
-                                                if (topsellingproduct != null)
+                                                if (Model.TopProducts != null)
                                                 {
-                                                    for (int k = 0; k < topsellingproduct.Count; k++)
+                                                    for (int k = 0; k < Model.TopProducts.Count; k++)
                                                     {
-                                                        if (topsellingproduct[k].ProductId == productslist[i + j].Id)
+                                                        if (Model.TopProducts[k].ProductId == Model.SearchedProducts[i + j].Id)
                                                         {
-                                                            if (topsellingproduct[k].Quantity == topthreeqty[0])
+                                                            if (Model.TopProducts[k].Quantity == Model.Top3Qty[0])
                                                             {<span style="color:darkred"><b>BEST SELLING!</b></span> }
 
-                                                            else if (topsellingproduct[k].Quantity == topthreeqty[1])
+                                                            else if (Model.TopProducts[k].Quantity == Model.Top3Qty[1])
                                                             { <span style="color:orangered"><b>2nd BEST SELLING!</b></span> }
 
-                                                            else if (topsellingproduct[k].Quantity == topthreeqty[2])
+                                                            else if (Model.TopProducts[k].Quantity == Model.Top3Qty[2])
                                                             { <span style="color:darkgoldenrod"><b>3rd BEST SELLING!</b></span> }
                                                             else
                                                             { <span style="visibility:hidden"><b>NOT BEST SELLING!</b></span>}
@@ -268,23 +185,23 @@
                                                 }
                                             }
                                         </div>
-                                        @if (ViewData["name"] != null) // generates wish icon according to loggedin status
+                                        @if (Model.Name != null) // generates wish icon according to loggedin status
                                         {
-                                            if (foundproductslist[i + j].Wish == false)
+                                            if (Model.SearchedProducts[i + j].Wish == false)
                                             {
-                                                <img src="~/img/hearts_black.png" class="wish_icon" wish_id="@foundproductslist[i + j].Id" />
+                                                <img src="~/img/hearts_black.png" class="wish_icon" wish_id="@Model.SearchedProducts[i + j].Id" />
                                             }
                                             else
                                             {
-                                                <img src="~/img/hearts_color.png" class="wish_icon" wish_id="@foundproductslist[i + j].Id" />
+                                                <img src="~/img/hearts_color.png" class="wish_icon" wish_id="@Model.SearchedProducts[i + j].Id" />
                                             }
                                         }
                                     </div>
                                     <br />
                                     <div>
-                                        <p style="text-align:justify"><b>@foundproductslist[i + j].Title</b></p>
-                                        <p style="text-align:justify">@foundproductslist[i + j].Description</p>
-                                        <p style="text-align:justify"><em>S$@foundproductslist[i + j].Price</em></p>
+                                        <p style="text-align:justify"><b>@Model.SearchedProducts[i + j].Title</b></p>
+                                        <p style="text-align:justify">@Model.SearchedProducts[i + j].Description</p>
+                                        <p style="text-align:justify"><em>S$@Model.SearchedProducts[i + j].Price</em></p>
                                     </div>
                                 </td>
                             }

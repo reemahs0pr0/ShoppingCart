@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Models;
 using Microsoft.AspNetCore.Http;
 using ShoppingCart.Db;
-using System.Security.Cryptography.X509Certificates;
 using ShoppingCart.DAL;
+using ShoppingCart.ViewModels;
 
 namespace ShoppingCart.Controllers
 {
@@ -31,16 +31,17 @@ namespace ShoppingCart.Controllers
         //when user click 'My Purchases'
         public IActionResult DisplayPurchases()
         {
+            PurchasesViewModel purchasesViewModel = new PurchasesViewModel();
+
             // data of past purchases will be added into a list here
             List<Purchases> purchases = FinalList();
-            ViewData["purchases"] = purchases;
 
             // to highlight "Shopping" as the selected menu-item
             ViewData["Is_Shopping"] = "menu_hilite";
+            purchasesViewModel.Purchases = purchases;
+            purchasesViewModel.Total = TempData["total"] as string;
 
-            ViewData["total"] = TempData["total"] as string;
-
-            return View();
+            return View(purchasesViewModel);
         }
         public List<Purchases> FinalList()
         {

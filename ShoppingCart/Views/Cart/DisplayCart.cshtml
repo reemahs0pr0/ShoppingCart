@@ -1,12 +1,12 @@
-﻿@{
+﻿@model ShoppingCart.ViewModels.CartViewModel
+
+@{
     ViewData["Title"] = "View Cart";
-    string total = (string)ViewData["total"];
-    bool loggedIn = (bool)ViewData["loggedin"];
-    List<Cart> cart = (List<Cart>)ViewData["cart"];
-    List<string> amt = new List<string>();
-    foreach (var item in cart)
+    Model.Amount = new List<string>();
+
+    foreach (var item in Model.Cart)
     {
-        amt.Add((item.Product.Price * item.Quantity).ToString("#0.00"));
+        Model.Amount.Add((item.Product.Price * item.Quantity).ToString("#0.00"));
     }
 }
 
@@ -15,70 +15,13 @@
     <script src="~/js/cart/displaycart.js"></script>
 }
 
-<style>
-    #empty {
-        text-align: center;
-        font-weight: bold;
-        font-size: 36px;
-    }
-
-    .total {
-        font-size: 20px;
-        position: fixed;
-        top: 75px;
-        right: 50px;
-    }
-
-    .product_container img {
-        width: 200px;
-        height: 200px;
-        border: solid 1px black;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 20px;
-    }
-
-    table {
-        margin: auto;
-    }
-
-    .remove_icon {
-        cursor: pointer;
-        width: 20px;
-        height: 20px;
-        margin-left: 200px;
-    }
-
-    .product_container {
-        border: solid black 2px;
-        display: block;
-        margin: auto;
-        width: 300px;
-        padding: 10px;
-    }
-
-    .quantity {
-        width: 40px;
-    }
-
-    td {
-        padding: 5px;
-    }
-
-    .details {
-        display: block;
-        margin-left: 30px;
-        padding: 10px;
-    }
-</style>
-
 <div id="header">
     <header>
         <h1>View Cart</h1>
+        <link rel="stylesheet" href="~/css/displaycart.css" />
     </header>
     <a href="/Product/DisplayProduct"><u>Continue Shopping</u></a> |
-    @if (loggedIn)
+    @if (Model.LoggedIn)
     {
         <a href="/Purchases/DisplayNewPurchases" id="checkout"><u>Checkout</u></a>
     }
@@ -86,8 +29,8 @@
     {
         <a href="/Login/Index2" id="checkout"><u>Checkout</u></a>
     }
-    <span class="total"><b>Total: $<span id="total_price">@total</span></b></span>
-    @if (loggedIn)
+    <span class="total"><b>Total: $<span id="total_price">@Model.Total</span></b></span>
+    @if (Model.LoggedIn)
     {
         <table>
             <tr>
@@ -101,7 +44,7 @@
     }
 </div>
 <div id="body">
-    @if (total == "0.00")
+    @if (Model.Total == "0.00")
     {
         <span id="empty" style="display:block">
             <br /><br /><br />
@@ -116,30 +59,30 @@
         </span>
         <br />
         <table>
-            @for (int i = 0; i < cart.Count; i++)
+            @for (int i = 0; i < Model.Cart.Count; i++)
             {
-                <tr id=@cart[i].ProductId>
+                <tr id=@Model.Cart[i].ProductId>
                     <td>
                         <div class="product_container text-center">
                             @{
-                                string link = ViewData["images_prefix"] + cart[i].Product.Image;
+                                string link = ViewData["images_prefix"] + Model.Cart[i].Product.Image;
                             }
                             <img src="@link"/>
-                            <b>@cart[i].Product.Title</b>
+                            <b>@Model.Cart[i].Product.Title</b>
                             <br />
-                            @cart[i].Product.Description
+                            @Model.Cart[i].Product.Description
                         </div>
                     </td>
                     <td>
                         <div class="details">
-                            Unit Price: $<span class="price" price_id=@cart[i].ProductId>@cart[i].Product.Price</span>
+                            Unit Price: $<span class="price" price_id=@Model.Cart[i].ProductId>@Model.Cart[i].Product.Price</span>
                             <br /><br />
-                            Quantity: <input class="quantity" type="number" value=@cart[i].Quantity min="1" quantity_id=@cart[i].ProductId>
+                            Quantity: <input class="quantity" type="number" value=@Model.Cart[i].Quantity min="1" quantity_id=@Model.Cart[i].ProductId>
                             <br /><br />
-                            Amount: $<span class="amount" amount_id=@cart[i].ProductId>@amt[i]</span>
+                            Amount: $<span class="amount" amount_id=@Model.Cart[i].ProductId>@Model.Amount[i]</span>
                         </div>
                     </td>
-                    <td><image src="/img/remove_icon.png" class="remove_icon" product_id=@cart[i].ProductId /></td>
+                    <td><image src="/img/remove_icon.png" class="remove_icon" product_id=@Model.Cart[i].ProductId /></td>
                 </tr>
             }
         </table>
